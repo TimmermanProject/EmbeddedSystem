@@ -1,0 +1,19 @@
+package shared;
+
+import java.util.ArrayList;
+
+
+
+public class RoomData extends Frame {
+
+	private int BuildingID;
+	private int FloorID;
+	private int RoomID;
+	private ArrayList accessCodes; // contains list of RFID that can enter room
+	private boolean doorStatus; // current door status, open or closed
+	
+	public enum doorStatusCodes { OPEN, CLOSED, EMERGENCY }
+	
+	
+	
+}

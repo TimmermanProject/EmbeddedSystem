@@ -1,0 +1,10 @@
+package shared;
+
+/** 
+ * @author Thomas Verbeke
+ * Abstract class for all frame
+ * 
+ * **/
+public abstract class Frame {
+
+}
