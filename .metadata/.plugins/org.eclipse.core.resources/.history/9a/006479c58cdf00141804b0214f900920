@@ -1,0 +1,37 @@
+/** **/
+
+package communication;
+
+import jssc.SerialPort;
+import jssc.SerialPortException;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class SerialComm {
+	private InputStream in;
+    private OutputStream out;
+
+    
+	public SerialComm (){
+		//open Thread for reading from serial port
+		//inside this thread assemble the frame
+		//handle the frame
+		SerialPort serialPort = new SerialPort("/dev/ttyS80");
+		
+		try {
+			
+	        serialPort.openPort();//Open serial port
+	        serialPort.setParams(SerialPort.BAUDRATE_9600, 
+	                             SerialPort.DATABITS_8,
+	                             SerialPort.STOPBITS_1,
+	                             SerialPort.PARITY_NONE); ;
+	        serialPort.writeBytes("This is a test string".getBytes());	//Write data to port
+	        serialPort.closePort();//Close serial port
+	        
+		} catch (SerialPortException ex) {
+			System.out.println(ex);
+	    }
+    
+	}
+}

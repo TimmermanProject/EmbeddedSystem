@@ -1,0 +1,79 @@
+/** **/
+
+package communication;
+
+import gnu.io.CommPort;
+import gnu.io.CommPortIdentifier;
+import gnu.io.NoSuchPortException;
+import gnu.io.PortInUseException;
+import gnu.io.SerialPort;
+import gnu.io.UnsupportedCommOperationException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class SerialComm {
+	private InputStream inputStream;
+    private OutputStream outputStream;
+    private SerialPort serialPort;
+
+    
+	public SerialComm () throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException{
+		//open Thread for reading from serial port
+		//inside this thread assemble the frame
+		//handle the frame
+		
+		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier("/dev/ttyS80");
+
+		if(portIdentifier.isCurrentlyOwned()){
+			System.out.println("Port is currently in use");
+		} else {
+			
+			CommPort commPort = portIdentifier.open(this.getClass().getName(),4000);
+			
+			if( commPort instanceof SerialPort ){
+			
+				serialPort = (SerialPort) commPort;
+				serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+			
+				inputStream = serialPort.getInputStream();
+				outputStream = serialPort.getOutputStream();
+				
+			System.out.println("Port opened, info from setupCommunication in SerialCommunicator");
+			
+			} else {		
+				System.out.println("Error, was not a serial port");
+			}
+		}
+    
+	}
+	
+	 /**
+     * Close the connection on the serial port 
+     */
+    public void closeConnection(){
+        
+      serialPort.close();
+      
+    }
+    
+    /**
+     * Function returns the input stream 
+     * setupCommunication should be called first
+     * @return 
+     */
+    public InputStream getInputStream(){
+        return inputStream;
+    }
+    
+    /**
+     * 
+     * Getter for the outputstream in case
+     * data is to be written to the serial port
+     * @return
+     */
+    public OutputStream getOutputStream(){
+        return outputStream;
+    }
+}
