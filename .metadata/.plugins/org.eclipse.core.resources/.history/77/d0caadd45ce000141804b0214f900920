@@ -24,21 +24,16 @@ public class SerialComm {
 	private InputStream inputStream;
     private OutputStream outputStream;
     private SerialPort serialPort;
-     
+
     
-	public SerialComm () throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
-		
-		/** this part of code should be moved to a main class -- START -- **/
-    	EthernetCommClient client = new EthernetCommClient("Server",99);
-    	client.start();
-    	
-		/** this part of code should be moved to a main class -- END -- **/
+	public SerialComm () throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException{
 		
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier("/dev/ttyS80");
 
 		if(portIdentifier.isCurrentlyOwned()){
 			System.out.println("Port is currently in use");
 		} else {
+			
 			CommPort commPort = portIdentifier.open(this.getClass().getName(),4000);
 			
 			if( commPort instanceof SerialPort ){
@@ -112,19 +107,18 @@ public class SerialComm {
                         		char type = (char) readBuffer[i+3];
                         		
                         		switch (type) {
-                        			case 'A': //RoomData (let's say roomData has a size of 3 bytes)
+                        			case 'A': //RoomData
                         				RoomData frame = new RoomData();
                         				frame.setBuildingID(0);
                         				frame.setFloorID(0);
                         				frame.setRoomID(0);
                         				
                         			case 'B': 
-                        			case 'C':                 		
+                        			case 'C':
+                        		
                         		}
                         		
-                        		//add frame to queue
-                        		
-                      
+                        		i=i+3; //jump size now depends on message size by convention (or we could give size field)
                         	} else if (serialChar == '\r') { //end delimiter
                         		//end of frame -> stop
                         		break;

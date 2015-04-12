@@ -29,9 +29,8 @@ public class SerialComm {
 	public SerialComm () throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
 		
 		/** this part of code should be moved to a main class -- START -- **/
-    	EthernetCommClient client = new EthernetCommClient("Server",99);
-    	client.start();
-    	
+    	EthernetCommClient client;
+
 		/** this part of code should be moved to a main class -- END -- **/
 		
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier("/dev/ttyS80");

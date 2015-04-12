@@ -33,14 +33,7 @@ public class EthernetCommClient extends Thread {
 	
 	public void run(){
 		while (true){
-			try {
-                Object o = inputBuffer.readObject();
-                System.out.println("Read object: "+o);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+			
 		}
 	}
 	

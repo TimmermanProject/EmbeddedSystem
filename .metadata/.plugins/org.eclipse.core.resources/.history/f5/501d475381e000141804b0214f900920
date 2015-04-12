@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 
 public class EthernetCommClient extends Thread {
@@ -19,30 +18,21 @@ public class EthernetCommClient extends Thread {
     private ObjectOutputStream outputBuffer;
     private Socket server;
     
-	public EthernetCommClient(String serverName, int port) throws UnknownHostException, IOException{
-	     System.out.println("Connecting to " + serverName + " on port " + port);
-	     server = new Socket(serverName, port); //open socket
-	     
-		 inputBuffer = new ObjectInputStream(server.getInputStream());
-	     outputBuffer = new ObjectOutputStream(server.getOutputStream());
-	
-			
-	     System.out.println("Just connected to "  + server.getRemoteSocketAddress());
-	
-	}
-	
-	public void run(){
-		while (true){
-			try {
-                Object o = inputBuffer.readObject();
-                System.out.println("Read object: "+o);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-		}
-	}
+	public EthernetCommClient(String serverName, int port){
+	      try {
+	         System.out.println("Connecting to " + serverName + " on port " + port);
+	         server = new Socket(serverName, port); //open socket
+	         
+	         inputBuffer = new ObjectInputStream(server.getInputStream());
+	         outputBuffer = new ObjectOutputStream(server.getOutputStream());
+
+				
+	         System.out.println("Just connected to "  + server.getRemoteSocketAddress());
+
+	      } catch(IOException e) {
+	         e.printStackTrace();
+	      }
+	   }	
 	
 	/** getter for inputstream **/
 	public ObjectInputStream getInputBuffer(){
