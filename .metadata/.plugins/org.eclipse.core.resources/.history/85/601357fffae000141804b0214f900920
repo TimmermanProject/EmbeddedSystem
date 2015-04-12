@@ -4,9 +4,11 @@
  * Client class (typically running on RasPi) 
  * TODO
  * 	-send frames based on shared library
- * 	-implement logging system? (maybe not necessary in this version)
+ * 	-implement logging system
  *  **/
 package communication;
+
+import gnu.io.SerialPort;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -72,14 +74,12 @@ public class EthernetCommClient extends Thread {
 	/** check what the frame type is and handle accordingly **/
 	public void handleEthernetFrame(Object o){
 		if( o instanceof RoomData ){ //RoomData Frame
-			//update database?
-			//ACK?
-			//sendEthernetFrame()
+			
 		}
 	}
 	
 	/** wrapper to send Ethernet frames **/
-	public void sendEthernetFrame(Frame frame){ //might not work -> Object
+	public void sendEthernetFrame(Frame frame){
 		System.out.println("Sending frame");
 		try {
 			outputBuffer.writeObject(frame);

@@ -72,14 +72,12 @@ public class EthernetCommClient extends Thread {
 	/** check what the frame type is and handle accordingly **/
 	public void handleEthernetFrame(Object o){
 		if( o instanceof RoomData ){ //RoomData Frame
-			//update database?
-			//ACK?
-			//sendEthernetFrame()
+			
 		}
 	}
 	
 	/** wrapper to send Ethernet frames **/
-	public void sendEthernetFrame(Frame frame){ //might not work -> Object
+	public void sendEthernetFrame(Frame frame){
 		System.out.println("Sending frame");
 		try {
 			outputBuffer.writeObject(frame);

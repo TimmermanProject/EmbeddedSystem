@@ -79,7 +79,7 @@ public class EthernetCommClient extends Thread {
 	}
 	
 	/** wrapper to send Ethernet frames **/
-	public void sendEthernetFrame(Frame frame){ //might not work -> Object
+	public void sendEthernetFrame(Frame frame){
 		System.out.println("Sending frame");
 		try {
 			outputBuffer.writeObject(frame);
