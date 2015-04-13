@@ -1,5 +1,7 @@
 /** 
  * @author Thomas Verbeke
+ * SERVER CLASS
+ * 
  * TODO: This class will only serve a point to point connection. In our complete scenario this needs to be a single to many connection
  * http://stackoverflow.com/questions/10131377/socket-programming-multiple-client-to-one-server
  * 
@@ -51,4 +53,6 @@ public class EthernetCommServer extends Thread {
 		   e.printStackTrace();
 	   }
    	}
+   
+   
 }

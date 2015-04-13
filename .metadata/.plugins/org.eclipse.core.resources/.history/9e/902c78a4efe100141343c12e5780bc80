@@ -1,0 +1,22 @@
+package shared;
+
+import shared.Frame.frameTypes;
+
+/** 
+ * 	@author Thomas Verbeke
+ * 	
+ * 
+ * **/
+
+public class FrameFactory {
+	public Frame FrameFactory(frameTypes frameType){
+		Frame newFrame = null;
+		
+		if (frameType.equals("RoomData")){
+			return new RoomData();
+		} else { // else if (frameType.equals("...")){}
+			return null; 
+		}
+
+	}
+}

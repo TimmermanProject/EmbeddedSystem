@@ -1,7 +1,9 @@
 /** 
  * @author thomasverbeke
+ * CLIENT CLASS
+ * 
  * TODO: 	-threads!!
- * 			-
+ * 			-test charset; could give problems due to 8bit/16bit...blah blah
  * **/
 
 package communication;
@@ -20,7 +22,7 @@ import java.io.OutputStream;
 
 import shared.RoomData;
 
-public class SerialComm {
+public class SerialComm extends Thread {
 	private InputStream inputStream;
     private OutputStream outputStream;
     private SerialPort serialPort;

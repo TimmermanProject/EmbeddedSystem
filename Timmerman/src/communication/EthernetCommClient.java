@@ -1,7 +1,8 @@
 /**
  * @author Thomas Verbeke
  * A socket is one end-point of a two-way communication link between two programs running on the network. 
- * Client class (typically running on RasPi) 
+ * CLIENT CLASS
+ * 
  * TODO
  * 	-send frames based on shared library
  * 	-implement logging system? (maybe not necessary in this version)

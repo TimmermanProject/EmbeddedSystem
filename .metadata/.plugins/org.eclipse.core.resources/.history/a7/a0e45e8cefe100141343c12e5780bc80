@@ -1,0 +1,15 @@
+package shared;
+
+/** 
+ * 	@author Thomas Verbeke
+ * 	
+ * 
+ * **/
+
+
+
+public class FrameFactory {
+	public FrameFactory(frameTypes frameType){
+		
+	}
+}

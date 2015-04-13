@@ -1,7 +1,9 @@
 /** 
  * @author thomasverbeke
  * 
- * This class belongs to a shared library; shared between Raspberry Pi and Server in order for them to more easily communicate. 
+ *	This class belongs to a shared library; shared between Raspberry Pi and Server in order for them to more easily communicate. 
+ *	
+ * 
  * **/
 
 package shared;
