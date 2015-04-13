@@ -9,7 +9,7 @@ import shared.Frame.frameTypes;
  * **/
 
 public class FrameFactory {
-	public Frame makeFrame (frameTypes frameType){
+	public Frame FrameFactory(frameTypes frameType){
 		Frame newFrame = null;
 		
 		if (frameType.equals("RoomData")){

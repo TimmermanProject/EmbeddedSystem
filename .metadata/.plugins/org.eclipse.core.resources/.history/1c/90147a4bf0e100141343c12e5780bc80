@@ -14,9 +14,6 @@ package communication;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-
-import shared.Frame;
-import shared.FrameFactory;
 import shared.RoomData;
 
 public class EthernetFrameHandler extends Thread {
@@ -35,21 +32,12 @@ public class EthernetFrameHandler extends Thread {
 			while (true){
 				Object obj = inputBuffer.readObject();
 				//check incoming frame type
-				FrameFactory frameFactory = new FrameFactory();
-				Frame frameCast = (Frame) obj;
-				
-				if (frameCast != null){
-					frameFactory.makeFrame(frameCast.getFrameType());
-				} else {
-					System.out.println("Something went wrong");
-				}
-				
-				//if (obj instanceof RoomData){
+				if (obj instanceof RoomData){
 					//cast incoming object to shared library frame
-				//	RoomData frame = (RoomData) obj;
+					RoomData frame = (RoomData) obj;
 					//handle the frame appropriately
-				//	System.out.println("Building ID: " + frame.getBuildingID() + "Floor ID: " + frame.getFloorID() + "Room ID" + frame.getRoomID() );
-				//} 
+					System.out.println("Building ID: " + frame.getBuildingID() + "Floor ID: " + frame.getFloorID() + "Room ID" + frame.getRoomID() );
+				} 
 	        }
 		} catch (IOException | ClassNotFoundException e1) {
 			System.out.println("IO Exception");

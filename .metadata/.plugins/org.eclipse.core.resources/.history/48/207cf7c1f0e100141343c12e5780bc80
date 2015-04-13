@@ -48,8 +48,8 @@ public class EthernetFrameHandler extends Thread {
 					//cast incoming object to shared library frame
 				//	RoomData frame = (RoomData) obj;
 					//handle the frame appropriately
-				//	System.out.println("Building ID: " + frame.getBuildingID() + "Floor ID: " + frame.getFloorID() + "Room ID" + frame.getRoomID() );
-				//} 
+					System.out.println("Building ID: " + frame.getBuildingID() + "Floor ID: " + frame.getFloorID() + "Room ID" + frame.getRoomID() );
+				} 
 	        }
 		} catch (IOException | ClassNotFoundException e1) {
 			System.out.println("IO Exception");
