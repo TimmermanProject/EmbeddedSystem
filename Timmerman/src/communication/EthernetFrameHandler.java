@@ -44,6 +44,7 @@ public class EthernetFrameHandler extends Thread {
 					System.out.println("Something went wrong");
 				}
 				
+				//old code
 				//if (obj instanceof RoomData){
 					//cast incoming object to shared library frame
 				//	RoomData frame = (RoomData) obj;

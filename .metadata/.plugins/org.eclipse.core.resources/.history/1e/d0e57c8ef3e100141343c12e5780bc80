@@ -1,0 +1,9 @@
+package shared;
+
+public class RoomCommand extends Frame {
+	
+	
+	public RoomCommand(){
+		this.setFrameType(frameTypes.ROOM_COMMAND);
+	}
+}

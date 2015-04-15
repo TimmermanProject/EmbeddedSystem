@@ -21,6 +21,10 @@ public class RoomData extends Frame {
 	private ArrayList<Integer> accessCodes; 		// contains list of RFID that can enter room
 	private doorStatusCodes doorStatus; // current door status, open or closed
 	
+	public RoomData(){
+		this.setFrameType(frameTypes.ROOM_DATA);
+	}
+	
 	/** GETTERS AND SETTERS **/
 	
 	/**

@@ -1,0 +1,25 @@
+/** 
+ * @author thomasverbeke
+ * 
+ * **/
+
+package shared;
+
+public class RFIDAdd extends Frame {
+	private int accessCode; 
+	
+	public RFIDAdd (){
+		this.setFrameType(frameTypes.RFID_ADD);
+	}
+	
+	/** getters and setters **/
+	
+	public void setAccesCode(int accessCode){
+		this.accessCode = accessCode;
+	}
+	
+	public int getAccessCode (){
+		return accessCode;
+	}
+	
+}

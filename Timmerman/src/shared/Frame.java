@@ -1,3 +1,8 @@
+/** 
+ * @author thomasverbeke
+ * 
+ * **/
+
 package shared;
 
 import java.io.Serializable;
@@ -10,7 +15,7 @@ import java.io.Serializable;
  * **/
 
 public abstract class Frame implements Serializable {
-	public enum frameTypes { ROOM_DATA, ROOM_ACK, RFID_ADD, RFID_REMOVE, ROOM_ACTION }
+	public enum frameTypes { ROOM_DATA, ROOM_ACK, RFID, ROOM_COMMAND }
 	public frameTypes frameType;
 	
 	//getter

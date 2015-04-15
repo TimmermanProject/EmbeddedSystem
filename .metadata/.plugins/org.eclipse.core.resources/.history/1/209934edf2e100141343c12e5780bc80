@@ -1,0 +1,16 @@
+/** 
+ * @author thomasverbeke
+ * 
+ * **/
+
+package shared;
+
+public class RFIDRemove extends Frame {
+	
+	
+	public RFIDRemove(){
+		this.setFrameType(frameTypes.RFID_REMOVE);
+	}
+	
+	
+}

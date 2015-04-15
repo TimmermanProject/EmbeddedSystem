@@ -1,0 +1,12 @@
+package shared;
+
+public class RoomCommand extends Frame {
+	private int BuildingID;
+	private int FloorID;
+	private int RoomID;
+	private int ActionID;
+	
+	public RoomCommand(){
+		this.setFrameType(frameTypes.ROOM_COMMAND);
+	}
+}

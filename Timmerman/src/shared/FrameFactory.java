@@ -1,3 +1,8 @@
+/** 
+ * @author thomasverbeke
+ * 
+ * **/
+
 package shared;
 
 import shared.Frame.frameTypes;
@@ -12,9 +17,15 @@ public class FrameFactory {
 	public Frame makeFrame (frameTypes frameType){
 		Frame newFrame = null;
 		
-		if (frameType.equals("RoomData")){
+		if (frameType.equals(frameTypes.ROOM_DATA)){
 			return new RoomData();
-		} else { // else if (frameType.equals("...")){}
+		} else if (frameType.equals(frameTypes.ROOM_ACK)){
+			return new RoomACK();
+		} else if (equals(frameTypes.RFID)){
+			return new RFID();
+		} else if (equals(frameTypes.ROOM_COMMAND)){
+			return new RoomCommand();
+		} else { 
 			return null; 
 		}
 
