@@ -1,7 +1,0 @@
-package shared;
-
-public class RoomACK extends Frame {
-	public RoomACK(){
-		this.setFrameType(frameTypes.ROOM_ACK);
-	}
-}
