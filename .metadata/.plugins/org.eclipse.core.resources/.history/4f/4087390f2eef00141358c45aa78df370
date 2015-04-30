@@ -39,24 +39,26 @@ public class EthernetCommClient extends Thread {
 		//send 1 frame to test
 		sendTestFrame();
 		try {	
-			while (true){
-				System.out.println("incoming data");
+		while (true){
+			
                 Object o = inputBuffer.readObject();
                 handleEthernetFrame(o); //check frame
-			}
-		} catch (EOFException e){	
-			System.out.println("Connection lost");
-			try {
-				server.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}			
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+		}
+			} catch (EOFException e){
+				try {
+					System.out.println("Connection lost");
+					server.close();
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+		//}
 	}
 	
 	/** getter for inputstream **/
@@ -83,7 +85,9 @@ public class EthernetCommClient extends Thread {
 	/** check what the frame type is and handle accordingly **/
 	public void handleEthernetFrame(Object o){
 		if( o instanceof RoomData ){ //RoomData Frame
-			System.out.println("FrameType: RoomData");
+			//update database?
+			//ACK?
+			//sendEthernetFrame()
 		}
 	}
 	
