@@ -21,4 +21,6 @@
 <fullyQualifiedTypeName name="shared.RoomData"/>
 <fullyQualifiedTypeName name="shared.Frame"/>
 <fullyQualifiedTypeName name="communication.SerialComm"/>
+<fullyQualifiedTypeName name="shared.Frame.frameTypes"/>
+<fullyQualifiedTypeName name="java.io.EOFException"/>
 </qualifiedTypeNameHistroy>
