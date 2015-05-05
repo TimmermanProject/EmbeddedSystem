@@ -19,6 +19,7 @@ import gnu.io.UnsupportedCommOperationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import shared.RoomData;
 
@@ -90,6 +91,38 @@ public class SerialComm extends Thread {
         return outputStream;
     }
     
+    /** Write frames to PIC 
+     * @throws IOException **/
+    public void serialWrite(char frameType) throws IOException{
+    	byte[] out = new byte[16];
+    	out[0] = (byte) '#';
+    	
+    	switch (frameType){
+    		case 'A':                  // frame: "#A\n"
+    			out[1] = (byte) 'A';
+    			out[2] = (byte) '\n';
+    		//case 'B':
+    	}
+    		
+    	outputStream.write(out, 0, out.length);
+    }
+    
+    /** Test function to send a frame over serial connection**/
+    public void sendFrameTest(){
+    	System.out.println("Sending a test Frame");
+    	System.out.println("Type: 'A'");
+    		
+    	try {
+    		serialWrite('A');
+			wait(1000);
+		} catch (InterruptedException | IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    /** Catch serial events and assemble the incoming frames 
+     * 
+     * **/
     public void serialEvent(SerialPortEvent event) {
     	byte[] readBuffer = new byte[400];
     	
@@ -101,36 +134,57 @@ public class SerialComm extends Thread {
     				if (inputStream.available() > 0) {
     					//NOW DECODE AND ASSEMBLE FRAME
     					int numBytes = inputStream.read(readBuffer);
-    
+    					//loop over data
     					for (int i=0; i<numBytes; i++) {
-    						//seperate thread for faster speeds?
-                        	char serialChar = (char) readBuffer[i];
+    						//TODO seperate thread for faster speeds?
+                        	char serialChar = (char) readBuffer[i]; //cast
                         	
                         	if (serialChar == '#'){ //start delimiter
-                        		
-                        		//construct new frame
-                        		char source = (char) readBuffer[i+1];
-                        		char destination = (char) readBuffer[i+2];
-                        		char type = (char) readBuffer[i+3];
+                        		System.out.println("Start of frame");
+                        		char source = (char) readBuffer[i+1]; //second byte
+                        		char type = (char) readBuffer[i+2]; // third byte
                         		
                         		switch (type) {
-                        			case 'A': //RoomData (let's say roomData has a size of 3 bytes)
-                        				RoomData frame = new RoomData();
-                        				frame.setBuildingID(0);
-                        				frame.setFloorID(0);
-                        				frame.setRoomID(0);
+                        			//type
+                        			case 'A': //RoomData: SIZE: 12bytes
                         				
-                        			case 'B': 
+                        				//make frame
+                        				RoomData frame = new RoomData();
+                        				
+                        				//set BuildingID/FloorID/RoomID
+                        				frame.setBuildingID((char) readBuffer[i+3]);
+                        				frame.setFloorID((char) readBuffer[i+4]);
+                        				frame.setRoomID((char) readBuffer[i+5]);
+                        				
+                        				//loop over accesscodes - 8 bytes - 
+                        				ArrayList<Integer> accessCodes = new ArrayList<Integer>();
+                        				for (int j=1; j<8; j++){
+                        					accessCodes.add((int) readBuffer[i+5+j]); 
+                        				}
+                        				frame.setAccessCodes(accessCodes);
+                        				
+                        				//set doorStatus
+                        				if (readBuffer[i+14]=='A'){
+                        					frame.setDoorStatus(RoomData.doorStatusCodes.CLOSED);
+                        				} else if (readBuffer[i+14]=='B'){
+                        					frame.setDoorStatus(RoomData.doorStatusCodes.EMERGENCY);
+                        				} else if (readBuffer[i+14]=='C'){
+                        					frame.setDoorStatus(RoomData.doorStatusCodes.OPEN);
+                        				}
+                        			case 'B': //RFID
+                        				
                         			case 'C':                 		
                         		}
                         		
-                        		//add frame to queue
-                        		
+                        		//TODO add frame to queue for handling
+                        		System.out.println("Frame assembled and added to queue");
                       
                         	} else if (serialChar == '\r') { //end delimiter
                         		//end of frame -> stop
+                        		System.out.println("End of frame");
                         		break;
                         	} else {
+                        		System.out.println("Lost data?");
                         		i++;
                         	}
                         }
