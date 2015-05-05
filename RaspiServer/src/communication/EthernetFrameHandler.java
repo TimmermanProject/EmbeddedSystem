@@ -2,11 +2,11 @@
  * @author Thomas Verbeke
  * 
  * SERVER CLASS
- * 
+ * NOTE: Currently not used; Handler is inside ethernetcommclient. But this should be extracted 
+ * to decouple code.
  * Handler for incoming clients connections running on the server.  (made in a new class so it can run in a separate thread
  * TODO: 	-Handle connections problems; maybe using time-out or ping system? Alive frames?
- * 			-Add other frames 
- * 			-Handle frames (ACK; the rest if for Dauphin)
+ * 			
  * 			
  * **/
 

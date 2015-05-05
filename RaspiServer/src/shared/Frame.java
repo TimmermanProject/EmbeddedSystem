@@ -15,7 +15,7 @@ import java.io.Serializable;
  * **/
 
 public abstract class Frame implements Serializable {
-	public enum frameTypes { ROOM_DATA, ACK, RFID, ROOM_COMMAND }
+	public enum frameTypes { ROOM_DATA, ACK, RFID, ROOM_COMMAND, ALARM }
 	public frameTypes frameType;
 	
 	//getter

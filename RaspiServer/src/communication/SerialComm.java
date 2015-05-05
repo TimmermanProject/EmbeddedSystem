@@ -4,6 +4,7 @@
  * 
  * TODO: 	-threads!!
  * 			-test charset; could give problems due to 8bit/16bit...blah blah
+ * 			-keep alive protocol? timer + send request if no data for certain amount of time; create new frame or use existing?
  * **/
 
 package communication;
@@ -22,6 +23,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import shared.ACK;
+import shared.Alarm;
 import shared.Frame;
 import shared.RFID;
 import shared.RoomData;
@@ -98,31 +100,66 @@ public class SerialComm extends Thread {
     
     /** Write frames to PIC 
      * @throws IOException **/
-    public void serialWrite(char frameType) throws IOException{
+    public void serialWrite(byte[] out) throws IOException{
+    	outputStream.write(out, 0, out.length);
+    }
+    
+   
+    public void sendRoomDataRequest() throws IOException{
+    	System.out.println("Sending Room Data Request");
+
     	byte[] out = new byte[16];
     	out[0] = (byte) '#';
     	
-    	switch (frameType){
-    		case 'A':                  // frame: "#A\n"
-    			out[1] = (byte) 'A';
-    			out[2] = (byte) '\n';
-    		//case 'B':
-    	}
-    		
-    	outputStream.write(out, 0, out.length);
+		out[1] = (byte) 'A';
+		out[2] = (byte) '\n';
+		
+		serialWrite(out);
     }
+    
+    public void sendRFIDRequest(boolean status, byte RFID_tag) throws IOException{
+    	byte[] out = new byte[16];
+    	out[0] = (byte) '#';
+    	if (status==true){
+    		// RFID Add
+    		System.out.println("Sending RFID Add Request");
+    		out[1] = (byte) 'B';
+    		out[2] = RFID_tag;
+    		out[3] = (byte) '\n';
+    	} else {
+    		// RFID_Remove
+    		System.out.println("Sending RFID Remove Request");
+    		out[1] = (byte) 'C';
+    		out[2] = RFID_tag;
+    		out[3] = (byte) '\n';
+        }
+    	
+    	serialWrite(out);
+    }
+    
+    public void sendCommand(byte command) throws IOException{
+		System.out.println("Sending Command");
+
+    	byte[] out = new byte[16];
+    	out[0] = (byte) '#';
+    	out[1] = command;
+    	out[2] = (byte) '\n';
+    	serialWrite(out);
+    }
+ 			
     
     /** Test function to send a frame over serial connection**/
     public void sendFrameTest(){
     	System.out.println("Sending a test Frame");
     	System.out.println("Type: 'A'");
-    		
+    		/**
     	try {
     		serialWrite('A');
 			wait(1000);
 		} catch (InterruptedException | IOException e) {
 			e.printStackTrace();
 		}
+		**/
     }
     
     /** Catch serial events and assemble the incoming frames 
@@ -151,34 +188,42 @@ public class SerialComm extends Thread {
                         		
                         		switch (type) {
                         			//type
-                        			case 'A': //RoomData: SIZE: 12bytes
+                        			case 'A': //RoomData: SIZE: 12bytes; as result of request or RFID set/delete
                         				
                         				//make frame
-                        				RoomData frame = new RoomData();
+                        				RoomData roomData = new RoomData();
                         				
                         				//set BuildingID/FloorID/RoomID
-                        				frame.setBuildingID((char) readBuffer[i+3]);
-                        				frame.setFloorID((char) readBuffer[i+4]);
-                        				frame.setRoomID((char) readBuffer[i+5]);
+                        				roomData.setBuildingID((char) readBuffer[i+3]);
+                        				roomData.setFloorID((char) readBuffer[i+4]);
+                        				roomData.setRoomID((char) readBuffer[i+5]);
                         				
                         				//loop over accesscodes - 8 bytes - 
                         				ArrayList<Integer> accessCodes = new ArrayList<Integer>();
                         				for (int j=1; j<8; j++){
                         					accessCodes.add((int) readBuffer[i+5+j]); 
                         				}
-                        				frame.setAccessCodes(accessCodes);
+                        				roomData.setAccessCodes(accessCodes);
                         				
                         				//set doorStatus
                         				if (readBuffer[i+14]=='A'){
-                        					frame.setDoorStatus(RoomData.doorStatusCodes.CLOSED);
+                        					roomData.setDoorStatus(RoomData.doorStatusCodes.CLOSED);
                         				} else if (readBuffer[i+14]=='B'){
-                        					frame.setDoorStatus(RoomData.doorStatusCodes.EMERGENCY);
+                        					roomData.setDoorStatus(RoomData.doorStatusCodes.EMERGENCY);
                         				} else if (readBuffer[i+14]=='C'){
-                        					frame.setDoorStatus(RoomData.doorStatusCodes.OPEN);
+                        					roomData.setDoorStatus(RoomData.doorStatusCodes.OPEN);
                         				}
-                        			case 'B': //RFID
                         				
-                        			case 'C':                 		
+                        				handleSerialFrame(roomData);
+                        			case 'B': //ACK (for command)
+                        				ACK ack = new ACK();
+                        				ack.setType(ACK.types.ROOM_COMMAND);
+                        				handleSerialFrame(ack);
+                        				
+                        			case 'C':	//Alarm 
+                        				Alarm alarm = new Alarm();
+                        				handleSerialFrame(alarm);
+                        				
                         		}
                         		
                         		//TODO add frame to queue for handling
@@ -204,14 +249,20 @@ public class SerialComm extends Thread {
      *  This should be handled in separate thread
      * **/
     public void handleSerialFrame(Frame frame) {
-    	if( frame instanceof RoomData ){ //RoomData Frame
+    	if( frame instanceof RoomData ){ //RoomData Frame as result of request or change to RFID tag list
     		System.out.println("FrameType: RoomData");
     		//TODO Update database
     		//TODO Send frame to Building Subsystem
 		}
     	
     	else if (frame instanceof ACK){
-    		
+    		System.out.println("FrameType: ACK");
+    		//TODO case structure depending on ACK type (ACK to room Command)
+    	}
+    	
+    	else if (frame instanceof Alarm){
+    		System.out.println("FrameType: Alarm");
+    		//TODO case structure depending on Alarm type
     	}
     	
     	
