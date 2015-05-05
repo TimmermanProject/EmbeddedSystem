@@ -19,8 +19,6 @@ public class FrameFactory {
 		
 		if (frameType.equals(frameTypes.ROOM_DATA)){
 			return new RoomData();
-		} else if (frameType.equals(frameTypes.ROOM_ACK)){
-			return new RoomACK();
 		} else if (equals(frameTypes.RFID)){
 			return new RFID();
 		} else if (equals(frameTypes.ROOM_COMMAND)){

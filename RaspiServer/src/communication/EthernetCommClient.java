@@ -79,13 +79,7 @@ public class EthernetCommClient extends Thread {
 		
 		System.out.println("Client closed");
 	}
-	
-	/** check what the frame type is and handle accordingly **/
-	public void handleEthernetFrame(Object o){
-		if( o instanceof RoomData ){ //RoomData Frame
-			System.out.println("FrameType: RoomData");
-		}
-	}
+
 	
 	/** wrapper to send Ethernet frames **/
 	public static void sendEthernetFrame(Frame frame){ //might not work -> Object
@@ -109,6 +103,7 @@ public class EthernetCommClient extends Thread {
 		
 	}
 	
+	/** Test function to send a frame **/
 	public void sendTestFrame(){
 		RoomData frame = new RoomData();
 		frame.setFrameType(Frame.frameTypes.ROOM_DATA);
@@ -117,6 +112,15 @@ public class EthernetCommClient extends Thread {
 		frame.setBuildingID(3);
 		
 		sendEthernetFrame(frame);
+	}
+	
+	/** check what the frame type is and handle accordingly 
+	 * 	TODO: better to take out this frame handler after inital development for loose coupling of code
+	 * **/
+	public void handleEthernetFrame(Object o){
+		if( o instanceof RoomData ){ //RoomData Frame
+			System.out.println("FrameType: RoomData");
+		}
 	}
 	
 }

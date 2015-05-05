@@ -21,20 +21,24 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import shared.ACK;
 import shared.Frame;
+import shared.RFID;
 import shared.RoomData;
 
 public class SerialComm extends Thread {
 	private InputStream inputStream;
     private OutputStream outputStream;
     private SerialPort serialPort;
-     
+    private ArrayList<Frame> frameBuffer;
     
 	public SerialComm (ArrayList<Frame> frameBuffer) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
 		
 		/** this part of code should be moved to a main class -- START -- **/
     	EthernetCommClient client = new EthernetCommClient("Server",99);
     	client.start();
+    	
+    	this.frameBuffer = frameBuffer;
     	
 		/** this part of code should be moved to a main class -- END -- **/
 		
@@ -195,5 +199,21 @@ public class SerialComm extends Thread {
     			}
     	}
     }
- 
+    
+    /** Handle serial frame; better to take this out of this class after initial development for loose coupling of code
+     *  This should be handled in separate thread
+     * **/
+    public void handleSerialFrame(Frame frame) {
+    	if( frame instanceof RoomData ){ //RoomData Frame
+    		System.out.println("FrameType: RoomData");
+    		//TODO Update database
+    		//TODO Send frame to Building Subsystem
+		}
+    	
+    	else if (frame instanceof ACK){
+    		
+    	}
+    	
+    	
+    }
 }
