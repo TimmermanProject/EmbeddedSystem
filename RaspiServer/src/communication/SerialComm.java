@@ -111,7 +111,7 @@ public class SerialComm extends Thread {
     	byte[] out = new byte[16];
     	out[0] = (byte) '#';
     	
-		out[1] = (byte) 'A';
+		out[1] = (byte) 'a';
 		out[2] = (byte) '\n';
 		
 		serialWrite(out);
@@ -123,13 +123,13 @@ public class SerialComm extends Thread {
     	if (status==true){
     		// RFID Add
     		System.out.println("Sending RFID Add Request");
-    		out[1] = (byte) 'B';
+    		out[1] = (byte) 'b';
     		out[2] = RFID_tag;
     		out[3] = (byte) '\n';
     	} else {
     		// RFID_Remove
     		System.out.println("Sending RFID Remove Request");
-    		out[1] = (byte) 'C';
+    		out[1] = (byte) 'c';
     		out[2] = RFID_tag;
     		out[3] = (byte) '\n';
         }
@@ -142,8 +142,10 @@ public class SerialComm extends Thread {
 
     	byte[] out = new byte[16];
     	out[0] = (byte) '#';
-    	out[1] = command;
-    	out[2] = (byte) '\n';
+    	out[1] = (byte) 'e';
+    	out[2] = command;
+    	out[3] = (byte) '\n';
+    	
     	serialWrite(out);
     }
  			
@@ -215,12 +217,12 @@ public class SerialComm extends Thread {
                         				}
                         				
                         				handleSerialFrame(roomData);
-                        			case 'B': //ACK (for command)
+                        			case 'F': //ACK (for command)
                         				ACK ack = new ACK();
                         				ack.setType(ACK.types.ROOM_COMMAND);
                         				handleSerialFrame(ack);
                         				
-                        			case 'C':	//Alarm 
+                        			case 'D':	//Alarm 
                         				Alarm alarm = new Alarm();
                         				handleSerialFrame(alarm);
                         				
