@@ -6,7 +6,7 @@ import java.io.IOException;
  * 
  **/
 
-public class Raspi {
+public class Raspi extends Thread {
 	public static final String COMMUNICATION_TYPE = "Ethernet";
 
 	@SuppressWarnings("unused")
@@ -35,8 +35,7 @@ public class Raspi {
 	public void run(AbstractComm communication){
 		//send 1 frame to test
 		try {	
-			communication.sendTestFrame();
-			
+			communication.sendTestFrame();	
 			while (true){
 				System.out.println("incoming data");
                 Object o = communication.inputBuffer.readObject();
@@ -55,5 +54,10 @@ public class Raspi {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+	}
+	
+	public static void main(String [] args){
+		Thread t = new Raspi();
+		t.run();	
 	}
 }
