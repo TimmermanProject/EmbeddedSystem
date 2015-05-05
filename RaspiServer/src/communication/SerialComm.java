@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import shared.Frame;
 import shared.RoomData;
 
 public class SerialComm extends Thread {
@@ -29,7 +30,7 @@ public class SerialComm extends Thread {
     private SerialPort serialPort;
      
     
-	public SerialComm () throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
+	public SerialComm (ArrayList<Frame> frameBuffer) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
 		
 		/** this part of code should be moved to a main class -- START -- **/
     	EthernetCommClient client = new EthernetCommClient("Server",99);
