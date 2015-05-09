@@ -8,17 +8,18 @@
 
 package shared;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SensorData extends Message {
+public class Data extends Message {
+	private static final long serialVersionUID = -1547837996222004778L;
+
 	public enum doorStatusCodes { OPEN, CLOSED, EMERGENCY }
 	
 	private ArrayList<Integer> accessCodes; 		// contains list of RFID that can enter room
 	private doorStatusCodes doorStatus; // current door status, open or closed
 	
-	public SensorData(){
-		this.setFrameType(frameTypes.ROOM_DATA);
+	public Data(){
+		this.setFrameType(frameTypes.DATA);
 	}
 	
 	/** GETTERS AND SETTERS **/

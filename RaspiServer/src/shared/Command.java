@@ -1,70 +1,68 @@
 package shared;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
+import shared.RFID.statusCodes;
+
 public class Command extends Message {
-	private int BuildingID;
-	private int FloorID;
-	private int RoomID;
-	private int ActionID;
+	private int actionID;
+	private int newStatus;
 	
 	public Command(){
-		this.setFrameType(frameTypes.ROOM_COMMAND);
+		this.setFrameType(frameTypes.COMMAND);
 	}
 
-	/** getters and setters **/
+	@Override
+	void send(OutputStream outputStream) {
+		byte[] out = new byte[16];
+    	out[0] = (byte) '#'; 		//	starting delimeter
+    	out[1] = (byte) '1'; 		//	address of source
+    	out[2] = (byte) 'e';		//	frameType
+    	out[3] = (byte) actionID;	// 	message : 1B ElementID
+    	out[4] = (byte) newStatus;	// 	message : 1B New Status
+		out[4] = (byte) '\n';		//	ending delimter
+		
+		try {
+			/**
+			 * @param data   Array holding data to be written
+		     * @param off    Offset of data in array
+		     * @param n      Amount of data to write, starting from off.
+		     * @return       Amount of data actually written
+		     **/
+			outputStream.write(out, 0, out.length);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
 	
-	/**
-	 * @return the buildingID
-	 */
-	public int getBuildingID() {
-		return BuildingID;
-	}
-
-	/**
-	 * @param buildingID the buildingID to set
-	 */
-	public void setBuildingID(int buildingID) {
-		BuildingID = buildingID;
-	}
-
-	/**
-	 * @return the floorID
-	 */
-	public int getFloorID() {
-		return FloorID;
-	}
-
-	/**
-	 * @param floorID the floorID to set
-	 */
-	public void setFloorID(int floorID) {
-		FloorID = floorID;
-	}
-
-	/**
-	 * @return the roomID
-	 */
-	public int getRoomID() {
-		return RoomID;
-	}
-
-	/**
-	 * @param roomID the roomID to set
-	 */
-	public void setRoomID(int roomID) {
-		RoomID = roomID;
-	}
+	/** getters and setters **/
 
 	/**
 	 * @return the actionID
 	 */
 	public int getActionID() {
-		return ActionID;
+		return actionID;
 	}
 
 	/**
 	 * @param actionID the actionID to set
 	 */
 	public void setActionID(int actionID) {
-		ActionID = actionID;
+		this.actionID = actionID;
 	}	
+
+	/**
+	 * @return the newStatus
+	 */
+	public int getNewStatus() {
+		return newStatus;
+	}
+
+	/**
+	 * @param newStatus the newStatus to set
+	 */
+	public void setNewStatus(int newStatus) {
+		this.newStatus = newStatus;
+	}
 }

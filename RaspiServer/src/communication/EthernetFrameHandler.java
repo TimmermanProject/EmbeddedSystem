@@ -17,7 +17,7 @@ import java.net.Socket;
 
 import core.MessageFactory;
 import shared.Message;
-import shared.SensorData;
+import shared.Data;
 
 public class EthernetFrameHandler extends Thread {
 	Socket client;

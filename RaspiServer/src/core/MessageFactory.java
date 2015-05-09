@@ -5,10 +5,10 @@
 
 package core;
 
-import shared.Command;
+import shared.ACK;
+import shared.Alarm;
 import shared.Message;
-import shared.RFID;
-import shared.SensorData;
+import shared.Data;
 import shared.Message.frameTypes;
 
 /** 
@@ -19,14 +19,12 @@ import shared.Message.frameTypes;
 
 public class MessageFactory {
 	public Message makeFrame (frameTypes frameType){
-		Message newFrame = null;
-		
-		if (frameType.equals(frameTypes.ROOM_DATA)){
-			return new SensorData();
-		} else if (equals(frameTypes.RFID)){
-			return new RFID();
-		} else if (equals(frameTypes.ROOM_COMMAND)){
-			return new Command();
+		if (frameType.equals(frameTypes.DATA)){
+			return new Data();
+		} else if (equals(frameTypes.ALARM)){
+			return new Alarm();
+		} else if (equals(frameTypes.ACK)){
+			return new ACK();
 		} else { 
 			return null; 
 		}

@@ -5,6 +5,7 @@
 
 package shared;
 
+import java.io.OutputStream;
 import java.io.Serializable;
 
 /** 
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * **/
 
 public abstract class Message implements Serializable {
-	public enum frameTypes { ROOM_DATA, ACK, RFID, ROOM_COMMAND, ALARM }
+	public enum frameTypes { DATA, DATA_REQUEST, ACK, RFID, COMMAND, ALARM }
 	private frameTypes frameType;
 	private Room room;
 	
@@ -38,9 +39,8 @@ public abstract class Message implements Serializable {
 	public Room getRoom(){
 		return room;
 	}
-	
-	/** Send frame over specified communication (should be decoupled from communication) **/
-	public void send(){
-		
+
+	void send(OutputStream outputStream) {
+		System.out.println("Not supported for this message");
 	}
 }

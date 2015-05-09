@@ -27,7 +27,7 @@ import shared.Alarm;
 import shared.Message;
 import shared.RFID;
 import shared.Room;
-import shared.SensorData;
+import shared.Data;
 
 public class SerialComm extends Thread {
 	private InputStream inputStream;
@@ -194,7 +194,7 @@ public class SerialComm extends Thread {
                         			case 'A': //RoomData: SIZE: 12bytes; as result of request or RFID set/delete
                         				
                         				//make frame
-                        				SensorData roomData = new SensorData();
+                        				Data roomData = new Data();
                         				
                         				//set BuildingID/FloorID/RoomID
                         				roomData.setRoom(new Room((char) readBuffer[i+3],(char) readBuffer[i+4],(char) readBuffer[i+5]));
@@ -208,11 +208,11 @@ public class SerialComm extends Thread {
                         				
                         				//set doorStatus
                         				if (readBuffer[i+14]=='A'){
-                        					roomData.setDoorStatus(SensorData.doorStatusCodes.CLOSED);
+                        					roomData.setDoorStatus(Data.doorStatusCodes.CLOSED);
                         				} else if (readBuffer[i+14]=='B'){
-                        					roomData.setDoorStatus(SensorData.doorStatusCodes.EMERGENCY);
+                        					roomData.setDoorStatus(Data.doorStatusCodes.EMERGENCY);
                         				} else if (readBuffer[i+14]=='C'){
-                        					roomData.setDoorStatus(SensorData.doorStatusCodes.OPEN);
+                        					roomData.setDoorStatus(Data.doorStatusCodes.OPEN);
                         				}
                         				
                         				handleSerialFrame(roomData);
@@ -250,7 +250,7 @@ public class SerialComm extends Thread {
      *  This should be handled in separate thread
      * **/
     public void handleSerialFrame(Message frame) {
-    	if( frame instanceof SensorData ){ //RoomData Frame as result of request or change to RFID tag list
+    	if( frame instanceof Data ){ //RoomData Frame as result of request or change to RFID tag list
     		System.out.println("FrameType: RoomData");
     		//TODO Update database
     		//TODO Send frame to Building Subsystem
