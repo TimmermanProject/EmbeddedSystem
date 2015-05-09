@@ -5,7 +5,7 @@
 
 package shared;
 
-public class RFID extends Frame {
+public class RFID extends Message {
 	private int accessCode; 
 	public enum statusCodes { ADD, REMOVE }
 	private statusCodes statusCode;
@@ -27,5 +27,6 @@ public class RFID extends Frame {
 	public void setStatus(statusCodes statusCode){
 		this.statusCode = statusCode;
 	}
+
 	
 }

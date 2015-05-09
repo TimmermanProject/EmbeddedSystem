@@ -24,17 +24,18 @@ import java.util.ArrayList;
 
 import shared.ACK;
 import shared.Alarm;
-import shared.Frame;
+import shared.Message;
 import shared.RFID;
-import shared.RoomData;
+import shared.Room;
+import shared.SensorData;
 
 public class SerialComm extends Thread {
 	private InputStream inputStream;
     private OutputStream outputStream;
     private SerialPort serialPort;
-    private ArrayList<Frame> frameBuffer;
+    private ArrayList<Message> frameBuffer;
     
-	public SerialComm (ArrayList<Frame> frameBuffer) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
+	public SerialComm (ArrayList<Message> frameBuffer) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
 		
 		/** this part of code should be moved to a main class -- START -- **/
     	EthernetCommClient client = new EthernetCommClient("Server",99);
@@ -193,13 +194,11 @@ public class SerialComm extends Thread {
                         			case 'A': //RoomData: SIZE: 12bytes; as result of request or RFID set/delete
                         				
                         				//make frame
-                        				RoomData roomData = new RoomData();
+                        				SensorData roomData = new SensorData();
                         				
                         				//set BuildingID/FloorID/RoomID
-                        				roomData.setBuildingID((char) readBuffer[i+3]);
-                        				roomData.setFloorID((char) readBuffer[i+4]);
-                        				roomData.setRoomID((char) readBuffer[i+5]);
-                        				
+                        				roomData.setRoom(new Room((char) readBuffer[i+3],(char) readBuffer[i+4],(char) readBuffer[i+5]));
+         
                         				//loop over accesscodes - 8 bytes - 
                         				ArrayList<Integer> accessCodes = new ArrayList<Integer>();
                         				for (int j=1; j<8; j++){
@@ -209,11 +208,11 @@ public class SerialComm extends Thread {
                         				
                         				//set doorStatus
                         				if (readBuffer[i+14]=='A'){
-                        					roomData.setDoorStatus(RoomData.doorStatusCodes.CLOSED);
+                        					roomData.setDoorStatus(SensorData.doorStatusCodes.CLOSED);
                         				} else if (readBuffer[i+14]=='B'){
-                        					roomData.setDoorStatus(RoomData.doorStatusCodes.EMERGENCY);
+                        					roomData.setDoorStatus(SensorData.doorStatusCodes.EMERGENCY);
                         				} else if (readBuffer[i+14]=='C'){
-                        					roomData.setDoorStatus(RoomData.doorStatusCodes.OPEN);
+                        					roomData.setDoorStatus(SensorData.doorStatusCodes.OPEN);
                         				}
                         				
                         				handleSerialFrame(roomData);
@@ -250,8 +249,8 @@ public class SerialComm extends Thread {
     /** Handle serial frame; better to take this out of this class after initial development for loose coupling of code
      *  This should be handled in separate thread
      * **/
-    public void handleSerialFrame(Frame frame) {
-    	if( frame instanceof RoomData ){ //RoomData Frame as result of request or change to RFID tag list
+    public void handleSerialFrame(Message frame) {
+    	if( frame instanceof SensorData ){ //RoomData Frame as result of request or change to RFID tag list
     		System.out.println("FrameType: RoomData");
     		//TODO Update database
     		//TODO Send frame to Building Subsystem

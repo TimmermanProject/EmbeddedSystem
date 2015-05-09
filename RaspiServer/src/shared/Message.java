@@ -14,9 +14,10 @@ import java.io.Serializable;
  * 
  * **/
 
-public abstract class Frame implements Serializable {
+public abstract class Message implements Serializable {
 	public enum frameTypes { ROOM_DATA, ACK, RFID, ROOM_COMMAND, ALARM }
-	public frameTypes frameType;
+	private frameTypes frameType;
+	private Room room;
 	
 	//getter
 	public frameTypes getFrameType(){
@@ -26,5 +27,20 @@ public abstract class Frame implements Serializable {
 	//setter
 	public void setFrameType (frameTypes frameType){
 		this.frameType = frameType;
+	}
+	
+	//setter
+	public void setRoom(Room room){
+		this.room = room;
+	}
+	
+	//getter
+	public Room getRoom(){
+		return room;
+	}
+	
+	/** Send frame over specified communication (should be decoupled from communication) **/
+	public void send(){
+		
 	}
 }

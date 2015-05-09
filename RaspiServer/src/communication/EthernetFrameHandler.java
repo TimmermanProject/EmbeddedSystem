@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
-import shared.Frame;
-import shared.FrameFactory;
-import shared.RoomData;
+import core.MessageFactory;
+import shared.Message;
+import shared.SensorData;
 
 public class EthernetFrameHandler extends Thread {
 	Socket client;
@@ -35,8 +35,8 @@ public class EthernetFrameHandler extends Thread {
 			while (true){
 				Object obj = inputBuffer.readObject();
 				//check incoming frame type
-				FrameFactory frameFactory = new FrameFactory();
-				Frame frameCast = (Frame) obj;
+				MessageFactory frameFactory = new MessageFactory();
+				Message frameCast = (Message) obj;
 				
 				if (frameCast != null){
 					frameFactory.makeFrame(frameCast.getFrameType());

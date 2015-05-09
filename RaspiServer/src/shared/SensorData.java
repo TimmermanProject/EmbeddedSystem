@@ -11,64 +11,18 @@ package shared;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RoomData extends Frame {
+public class SensorData extends Message {
 	public enum doorStatusCodes { OPEN, CLOSED, EMERGENCY }
-	
-	private int BuildingID;
-	private int FloorID;
-	private int RoomID;
 	
 	private ArrayList<Integer> accessCodes; 		// contains list of RFID that can enter room
 	private doorStatusCodes doorStatus; // current door status, open or closed
 	
-	public RoomData(){
+	public SensorData(){
 		this.setFrameType(frameTypes.ROOM_DATA);
 	}
 	
 	/** GETTERS AND SETTERS **/
 	
-	/**
-	 * @return the buildingID
-	 */
-	public int getBuildingID() {
-		return BuildingID;
-	}
-
-	/**
-	 * @param buildingID the buildingID to set
-	 */
-	public void setBuildingID(int buildingID) {
-		BuildingID = buildingID;
-	}
-
-	/**
-	 * @return the floorID
-	 */
-	public int getFloorID() {
-		return FloorID;
-	}
-
-	/**
-	 * @param floorID the floorID to set
-	 */
-	public void setFloorID(int floorID) {
-		FloorID = floorID;
-	}
-
-	/**
-	 * @return the roomID
-	 */
-	public int getRoomID() {
-		return RoomID;
-	}
-
-	/**
-	 * @param roomID the roomID to set
-	 */
-	public void setRoomID(int roomID) {
-		RoomID = roomID;
-	}
-
 	/**
 	 * @return the accessCodes
 	 */
@@ -104,5 +58,6 @@ public class RoomData extends Frame {
 	public void setDoorStatus(doorStatusCodes doorStatus) {
 		this.doorStatus = doorStatus;
 	}
+
 	
 }

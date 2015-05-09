@@ -3,9 +3,13 @@
  * 
  * **/
 
-package shared;
+package core;
 
-import shared.Frame.frameTypes;
+import shared.Command;
+import shared.Message;
+import shared.RFID;
+import shared.SensorData;
+import shared.Message.frameTypes;
 
 /** 
  * 	@author Thomas Verbeke
@@ -13,16 +17,16 @@ import shared.Frame.frameTypes;
  * 
  * **/
 
-public class FrameFactory {
-	public Frame makeFrame (frameTypes frameType){
-		Frame newFrame = null;
+public class MessageFactory {
+	public Message makeFrame (frameTypes frameType){
+		Message newFrame = null;
 		
 		if (frameType.equals(frameTypes.ROOM_DATA)){
-			return new RoomData();
+			return new SensorData();
 		} else if (equals(frameTypes.RFID)){
 			return new RFID();
 		} else if (equals(frameTypes.ROOM_COMMAND)){
-			return new RoomCommand();
+			return new Command();
 		} else { 
 			return null; 
 		}

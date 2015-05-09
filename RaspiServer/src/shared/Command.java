@@ -1,12 +1,12 @@
 package shared;
 
-public class RoomCommand extends Frame {
+public class Command extends Message {
 	private int BuildingID;
 	private int FloorID;
 	private int RoomID;
 	private int ActionID;
 	
-	public RoomCommand(){
+	public Command(){
 		this.setFrameType(frameTypes.ROOM_COMMAND);
 	}
 

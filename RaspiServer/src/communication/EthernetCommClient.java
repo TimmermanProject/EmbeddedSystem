@@ -16,8 +16,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import shared.Frame;
-import shared.RoomData;
+import shared.Message;
+import shared.Room;
+import shared.SensorData;
 
 
 public class EthernetCommClient extends Thread {
@@ -82,7 +83,7 @@ public class EthernetCommClient extends Thread {
 
 	
 	/** wrapper to send Ethernet frames **/
-	public static void sendEthernetFrame(Frame frame){ //might not work -> Object
+	public static void sendEthernetFrame(Message frame){ //might not work -> Object
 		System.out.println("Sending frame");
 		try {
 			outputBuffer.writeObject(frame);
@@ -105,11 +106,9 @@ public class EthernetCommClient extends Thread {
 	
 	/** Test function to send a frame **/
 	public void sendTestFrame(){
-		RoomData frame = new RoomData();
-		frame.setFrameType(Frame.frameTypes.ROOM_DATA);
-		frame.setRoomID(1);
-		frame.setFloorID(2);
-		frame.setBuildingID(3);
+		SensorData frame = new SensorData();
+		frame.setFrameType(Message.frameTypes.ROOM_DATA);
+		frame.setRoom(new Room(1,2,3));
 		
 		sendEthernetFrame(frame);
 	}
@@ -118,7 +117,7 @@ public class EthernetCommClient extends Thread {
 	 * 	TODO: better to take out this frame handler after inital development for loose coupling of code
 	 * **/
 	public void handleEthernetFrame(Object o){
-		if( o instanceof RoomData ){ //RoomData Frame
+		if( o instanceof SensorData ){ //RoomData Frame
 			System.out.println("FrameType: RoomData");
 		}
 	}
