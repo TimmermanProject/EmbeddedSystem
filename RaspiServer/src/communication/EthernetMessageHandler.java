@@ -19,10 +19,10 @@ import messages.Data;
 import messages.Message;
 import core.MessageFactory;
 
-public class EthernetFrameHandler extends Thread {
+public class EthernetMessageHandler extends Thread {
 	Socket client;
 	
-	public EthernetFrameHandler (Socket client){
+	public EthernetMessageHandler (Socket client){
 		this.client = client;
 	}
 	

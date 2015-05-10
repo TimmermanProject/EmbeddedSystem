@@ -7,7 +7,7 @@
  * 
  * **/
 
-package communication;
+package test;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+
+import communication.EthernetMessageHandler;
 
 public class EthernetCommServer extends Thread {
 	private ServerSocket serverSocket;
@@ -30,7 +32,7 @@ public class EthernetCommServer extends Thread {
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
 				
-				EthernetFrameHandler handler = new EthernetFrameHandler(server); //dispatch client connection to new Thread & Handle it
+				EthernetMessageHandler handler = new EthernetMessageHandler(server); //dispatch client connection to new Thread & Handle it
 				handler.start();
 		
 				//server.close();

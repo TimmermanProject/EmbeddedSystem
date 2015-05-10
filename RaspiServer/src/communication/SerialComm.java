@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import test.EthernetCommClient;
+import core.Database;
 import core.Room;
 import messages.ACK;
 import messages.Alarm;
@@ -33,71 +35,125 @@ public class SerialComm extends Thread {
 	private InputStream inputStream;
     private OutputStream outputStream;
     private SerialPort serialPort;
-    private ArrayList<Message> frameBuffer;
+    private Database db;
+    private SerialMessageHandler msgHandler;
     
-	public SerialComm (ArrayList<Message> frameBuffer) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
-		
-		/** this part of code should be moved to a main class -- START -- **/
-    	EthernetCommClient client = new EthernetCommClient("Server",99);
-    	client.start();
-    	
-    	this.frameBuffer = frameBuffer;
-    	
-		/** this part of code should be moved to a main class -- END -- **/
-		
-		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier("/dev/ttyS80");
+	public SerialComm (String portID, int timeout) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
+		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portID);
 
 		if(portIdentifier.isCurrentlyOwned()){
-			System.out.println("Port is currently in use");
+			System.out.println("Serial port in use");
 		} else {
-			CommPort commPort = portIdentifier.open(this.getClass().getName(),4000);
+			CommPort commPort = portIdentifier.open(this.getClass().getName(),timeout);
 			
 			if( commPort instanceof SerialPort ){
-			
 				serialPort = (SerialPort) commPort;
 				serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 			
 				inputStream = serialPort.getInputStream();
 				outputStream = serialPort.getOutputStream();
 				
-				// activate the DATA_AVAILABLE notifier
-	            serialPort.notifyOnDataAvailable(true);
+	            serialPort.notifyOnDataAvailable(true); // activate the DATA_AVAILABLE notifier
 				
-			System.out.println("Port opened, info from setupCommunication in SerialCommunicator");
-			
+	            System.out.println("SerialComm Open");
+
+	            db = new Database(); // connect to database
+	    		db.connectToMYSQL();
+	    		
+	    		msgHandler = new SerialMessageHandler(db); // create messageHandler
+	    		
+	    		System.out.println("Connected to database");
+	    		
 			} else {		
-				System.out.println("Error, was not a serial port");
+				System.out.println("Error, is not a serial port");
 			}
-		}
+		}	
     
 	}
 	
-	 /**
-     * Close the connection on the serial port 
-	 * @throws IOException 
-     */
-    public void closeConnection() throws IOException{
-      serialPort.getInputStream().close();
-      serialPort.getOutputStream().close();
-      serialPort.close(); // this call blocks while thread is attempting to read from inputstream
-      
+	 /** Catch serial events and assemble the incoming frames 
+     *  TODO Callback routine
+     * **/
+    public void serialEvent(SerialPortEvent event) {
+    	byte[] readBuffer = new byte[400];
+    	
+    	switch (event.getEventType()) { 
+    		case SerialPortEvent.DATA_AVAILABLE:
+    			
+    			try {
+    				
+    				if (inputStream.available() > 0) {
+    					//NOW DECODE AND ASSEMBLE FRAME
+    					int numBytes = inputStream.read(readBuffer);
+    					//loop over data
+    					for (int i=0; i<numBytes; i++) {
+    						//TODO seperate thread for faster speeds?
+                        	char serialChar = (char) readBuffer[i]; //cast
+                        	
+                        	if (serialChar == '#'){ //start delimiter
+                        		System.out.println("Start of frame");
+                        		char source = (char) readBuffer[i+1]; //second byte
+                        		char type = (char) readBuffer[i+2]; // third byte
+                        		
+                        		switch (type) {
+                        			//type
+                        			case 'A': //RoomData: SIZE: 12bytes; as result of request or RFID set/delete
+                        				
+                        				//make frame
+                        				Data roomData = new Data();
+                        				
+                        				//set BuildingID/FloorID/RoomID
+                        				roomData.setRoom(new Room((char) readBuffer[i+3],(char) readBuffer[i+4]));
+         
+                        				//loop over accesscodes - 8 bytes - 
+                        				ArrayList<Integer> accessCodes = new ArrayList<Integer>();
+                        				for (int j=1; j<8; j++){
+                        					accessCodes.add((int) readBuffer[i+5+j]); 
+                        				}
+                        				roomData.setAccessCodes(accessCodes);
+                        				
+                        				//set doorStatus
+                        				if (readBuffer[i+14]=='A'){
+                        					roomData.setDoorStatus(Data.doorStatusCodes.CLOSED);
+                        				} else if (readBuffer[i+14]=='B'){
+                        					roomData.setDoorStatus(Data.doorStatusCodes.EMERGENCY);
+                        				} else if (readBuffer[i+14]=='C'){
+                        					roomData.setDoorStatus(Data.doorStatusCodes.OPEN);
+                        				}
+                        				
+                        				msgHandler.handleMessage(roomData);
+                        			case 'F': //ACK (for command)
+                        				ACK ack = new ACK();
+                        				ack.setType(ACK.types.COMMAND);
+                        				msgHandler.handleMessage(ack);
+                        				
+                        			case 'D':	//Alarm 
+                        				Alarm alarm = new Alarm();
+                        				msgHandler.handleMessage(alarm);
+                        				
+                        		}
+                        		
+                        		//TODO add frame to queue for handling
+                        		System.out.println("Frame assembled and added to queue");
+                      
+                        	} else if (serialChar == '\r') { //end delimiter
+                        		//end of frame -> stop
+                        		System.out.println("End of frame");
+                        		break;
+                        	} else {
+                        		System.out.println("Lost data?");
+                        		i++;
+                        	}
+                        }
+    				}
+    			} catch (IOException ex) {
+                    // it's best not to throw the exception because the RXTX thread may not be prepared to handle
+    			}
+    	}
     }
     
-    /**
-     * Function returns the input stream setupCommunication should be called first
-     * @return 
-     */
-    public InputStream getInputStream(){
-        return inputStream;
-    }
-    
-    /**
-     * Getter for the outputstream in case data is to be written to the serial port
-     * @return
-     */
-    public OutputStream getOutputStream(){
-        return outputStream;
-    }
+
+	/** Methods for sending data to subsystem (PIC) **/
     
     /** Write frames to PIC 
      * @throws IOException **/
@@ -165,107 +221,33 @@ public class SerialComm extends Thread {
 		**/
     }
     
-    /** Catch serial events and assemble the incoming frames 
-     * 
-     * **/
-    public void serialEvent(SerialPortEvent event) {
-    	byte[] readBuffer = new byte[400];
-    	
-    	switch (event.getEventType()) { 
-    		case SerialPortEvent.DATA_AVAILABLE:
-    			
-    			try {
-    				
-    				if (inputStream.available() > 0) {
-    					//NOW DECODE AND ASSEMBLE FRAME
-    					int numBytes = inputStream.read(readBuffer);
-    					//loop over data
-    					for (int i=0; i<numBytes; i++) {
-    						//TODO seperate thread for faster speeds?
-                        	char serialChar = (char) readBuffer[i]; //cast
-                        	
-                        	if (serialChar == '#'){ //start delimiter
-                        		System.out.println("Start of frame");
-                        		char source = (char) readBuffer[i+1]; //second byte
-                        		char type = (char) readBuffer[i+2]; // third byte
-                        		
-                        		switch (type) {
-                        			//type
-                        			case 'A': //RoomData: SIZE: 12bytes; as result of request or RFID set/delete
-                        				
-                        				//make frame
-                        				Data roomData = new Data();
-                        				
-                        				//set BuildingID/FloorID/RoomID
-                        				roomData.setRoom(new Room((char) readBuffer[i+3],(char) readBuffer[i+4]));
-         
-                        				//loop over accesscodes - 8 bytes - 
-                        				ArrayList<Integer> accessCodes = new ArrayList<Integer>();
-                        				for (int j=1; j<8; j++){
-                        					accessCodes.add((int) readBuffer[i+5+j]); 
-                        				}
-                        				roomData.setAccessCodes(accessCodes);
-                        				
-                        				//set doorStatus
-                        				if (readBuffer[i+14]=='A'){
-                        					roomData.setDoorStatus(Data.doorStatusCodes.CLOSED);
-                        				} else if (readBuffer[i+14]=='B'){
-                        					roomData.setDoorStatus(Data.doorStatusCodes.EMERGENCY);
-                        				} else if (readBuffer[i+14]=='C'){
-                        					roomData.setDoorStatus(Data.doorStatusCodes.OPEN);
-                        				}
-                        				
-                        				handleSerialFrame(roomData);
-                        			case 'F': //ACK (for command)
-                        				ACK ack = new ACK();
-                        				ack.setType(ACK.types.COMMAND);
-                        				handleSerialFrame(ack);
-                        				
-                        			case 'D':	//Alarm 
-                        				Alarm alarm = new Alarm();
-                        				handleSerialFrame(alarm);
-                        				
-                        		}
-                        		
-                        		//TODO add frame to queue for handling
-                        		System.out.println("Frame assembled and added to queue");
-                      
-                        	} else if (serialChar == '\r') { //end delimiter
-                        		//end of frame -> stop
-                        		System.out.println("End of frame");
-                        		break;
-                        	} else {
-                        		System.out.println("Lost data?");
-                        		i++;
-                        	}
-                        }
-    				}
-    			} catch (IOException ex) {
-                    // it's best not to throw the exception because the RXTX thread may not be prepared to handle
-    			}
-    	}
+    /** getters and setters  **/
+    
+    /**
+     * Function returns the input stream setupCommunication should be called first
+     * @return 
+     */
+    public InputStream getInputStream(){
+        return inputStream;
     }
     
-    /** Handle serial frame; better to take this out of this class after initial development for loose coupling of code
-     *  This should be handled in separate thread
-     * **/
-    public void handleSerialFrame(Message frame) {
-    	if( frame instanceof Data ){ //RoomData Frame as result of request or change to RFID tag list
-    		System.out.println("FrameType: RoomData");
-    		//TODO Update database
-    		//TODO Send frame to Building Subsystem
-		}
-    	
-    	else if (frame instanceof ACK){
-    		System.out.println("FrameType: ACK");
-    		//TODO case structure depending on ACK type (ACK to room Command)
-    	}
-    	
-    	else if (frame instanceof Alarm){
-    		System.out.println("FrameType: Alarm");
-    		//TODO case structure depending on Alarm type
-    	}
-    	
-    	
+    /**
+     * Getter for the outputstream in case data is to be written to the serial port
+     * @return
+     */
+    public OutputStream getOutputStream(){
+        return outputStream;
     }
+    
+	
+    /**
+    * Close the connection on the serial port 
+	 * @throws IOException 
+    */
+   public void closeConnection() throws IOException{
+     serialPort.getInputStream().close();
+     serialPort.getOutputStream().close();
+     serialPort.close(); // this call blocks while thread is attempting to read from inputstream
+     
+   }
 }

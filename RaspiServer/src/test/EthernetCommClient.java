@@ -7,7 +7,7 @@
  * 	-send frames based on shared library
  * 	-implement logging system? (maybe not necessary in this version)
  *  **/
-package communication;
+package test;
 
 import java.io.EOFException;
 import java.io.IOException;
