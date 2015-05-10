@@ -6,7 +6,7 @@
  * 
  * **/
 
-package shared;
+package messages;
 
 import java.util.ArrayList;
 

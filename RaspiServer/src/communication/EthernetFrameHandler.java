@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+import messages.Data;
+import messages.Message;
 import core.MessageFactory;
-import shared.Message;
-import shared.Data;
 
 public class EthernetFrameHandler extends Thread {
 	Socket client;

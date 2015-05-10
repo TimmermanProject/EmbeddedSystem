@@ -3,10 +3,12 @@
  * 
  * **/
 
-package shared;
+package messages;
 
 import java.io.OutputStream;
 import java.io.Serializable;
+
+import core.Room;
 
 /** 
  * @author Thomas Verbeke

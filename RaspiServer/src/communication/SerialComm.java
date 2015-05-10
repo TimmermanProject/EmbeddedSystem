@@ -22,12 +22,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import shared.ACK;
-import shared.Alarm;
-import shared.Message;
-import shared.RFID;
-import shared.Room;
-import shared.Data;
+import core.Room;
+import messages.ACK;
+import messages.Alarm;
+import messages.Data;
+import messages.Message;
+import messages.RFID;
 
 public class SerialComm extends Thread {
 	private InputStream inputStream;
@@ -197,7 +197,7 @@ public class SerialComm extends Thread {
                         				Data roomData = new Data();
                         				
                         				//set BuildingID/FloorID/RoomID
-                        				roomData.setRoom(new Room((char) readBuffer[i+3],(char) readBuffer[i+4],(char) readBuffer[i+5]));
+                        				roomData.setRoom(new Room((char) readBuffer[i+3],(char) readBuffer[i+4]));
          
                         				//loop over accesscodes - 8 bytes - 
                         				ArrayList<Integer> accessCodes = new ArrayList<Integer>();
@@ -218,7 +218,7 @@ public class SerialComm extends Thread {
                         				handleSerialFrame(roomData);
                         			case 'F': //ACK (for command)
                         				ACK ack = new ACK();
-                        				ack.setType(ACK.types.ROOM_COMMAND);
+                        				ack.setType(ACK.types.COMMAND);
                         				handleSerialFrame(ack);
                         				
                         			case 'D':	//Alarm 

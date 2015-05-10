@@ -5,11 +5,11 @@
 
 package core;
 
-import shared.ACK;
-import shared.Alarm;
-import shared.Message;
-import shared.Data;
-import shared.Message.frameTypes;
+import messages.ACK;
+import messages.Alarm;
+import messages.Data;
+import messages.Message;
+import messages.Message.frameTypes;
 
 /** 
  * 	@author Thomas Verbeke
