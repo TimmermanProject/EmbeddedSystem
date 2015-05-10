@@ -1,6 +1,12 @@
 import java.io.EOFException;
 import java.io.IOException;
 
+import communication.AbstractComm;
+import communication.CommFactory;
+import communication.EthernetFactory;
+
+import core.Database;
+
 /** 
  * @author thomasverbeke
  * 
@@ -12,16 +18,22 @@ public class Raspi extends Thread {
 	@SuppressWarnings("unused")
 	public Raspi(){
 		CommFactory commFactory = null;
+		Database db = new Database();
+		db.connectToMYSQL();
 		
+		/** COMM TO BUILDING LEVEL **/
 		if (COMMUNICATION_TYPE == "Ethernet"){
 			commFactory = new EthernetFactory();
-			initCommunication(commFactory);
+			initUpCommunication(commFactory);
 		} else {
 			System.out.println("USB communication not implemented");
 		}
+		
+		/** COMM TO ROOM LEVEL (SERIAL) **/
 	}
 	
-	public void initCommunication(CommFactory communicationFactory){
+	/** Initialise communciation with Building Subsystem**/
+	public void initUpCommunication(CommFactory communicationFactory){
 		AbstractComm communication = communicationFactory.createComm();
 		try {
 			String serverAddr = "169.254.26.95";
