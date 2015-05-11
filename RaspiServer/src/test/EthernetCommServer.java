@@ -12,11 +12,14 @@ package test;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import communication.EthernetMessageHandler;
+import communication.MessageHandler;
+import core.Database;
 
 public class EthernetCommServer extends Thread {
 	private ServerSocket serverSocket;
@@ -32,8 +35,8 @@ public class EthernetCommServer extends Thread {
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
 				
-				EthernetMessageHandler handler = new EthernetMessageHandler(server); //dispatch client connection to new Thread & Handle it
-				handler.start();
+				//MessageHandler handler = new MessageHandler(null,); //dispatch client connection to new Thread & Handle it
+				//handler.start();
 		
 				//server.close();
 		   	} catch(SocketTimeoutException s){

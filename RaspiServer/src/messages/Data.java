@@ -8,6 +8,8 @@
 
 package messages;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class Data extends Message {
@@ -20,6 +22,11 @@ public class Data extends Message {
 	
 	public Data(){
 		this.setFrameType(frameTypes.DATA);
+	}
+	
+	@Override
+	public void sendObject(ObjectOutputStream objectOutputStream) throws IOException{
+		objectOutputStream.writeObject(this);	
 	}
 	
 	/** GETTERS AND SETTERS **/
@@ -59,6 +66,7 @@ public class Data extends Message {
 	public void setDoorStatus(doorStatusCodes doorStatus) {
 		this.doorStatus = doorStatus;
 	}
+
 
 	
 }

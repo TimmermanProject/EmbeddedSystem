@@ -14,7 +14,7 @@ public class Command extends Message {
 	}
 
 	@Override
-	public void send(OutputStream outputStream) {
+	public void sendSerial(OutputStream outputStream) {
 		byte[] out = new byte[16];
     	out[0] = (byte) '#'; 		//	starting delimeter
     	out[1] = (byte) '1'; 		//	address of source

@@ -18,7 +18,7 @@ public class RFID extends Message {
 	}
 	
 	@Override
-	public void send(OutputStream outputStream) {
+	public void sendSerial(OutputStream outputStream) {
 		byte[] out = new byte[16];
     	out[0] = (byte) '#'; 							//	starting delimeter
     	out[1] = (byte) '1'; 							//	address of source
@@ -58,4 +58,8 @@ public class RFID extends Message {
 	public void setStatus(statusCodes statusCode){
 		this.statusCode = statusCode;
 	}	
+	
+	public statusCodes getStatus(){
+		return statusCode;
+	}
 }

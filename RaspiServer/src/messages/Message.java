@@ -5,6 +5,8 @@
 
 package messages;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
@@ -42,7 +44,11 @@ public abstract class Message implements Serializable {
 		return room;
 	}
 
-	void send(OutputStream outputStream) {
+	void sendSerial(OutputStream outputStream) {
+		System.out.println("Not supported for this message");
+	}
+	
+	void sendObject(ObjectOutputStream objectOutputStream) throws IOException{
 		System.out.println("Not supported for this message");
 	}
 }

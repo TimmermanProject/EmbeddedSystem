@@ -19,7 +19,9 @@ import gnu.io.UnsupportedCommOperationException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.security.AccessControlContext;
 import java.util.ArrayList;
 
 import test.EthernetCommClient;
@@ -32,13 +34,16 @@ import messages.Message;
 import messages.RFID;
 
 public class SerialComm extends Thread {
-	private InputStream inputStream;
-    private OutputStream outputStream;
+	private InputStream serialInputStream;
+    private OutputStream serialOutputStream;
+    private ObjectOutputStream objectOutputStream;
     private SerialPort serialPort;
     private Database db;
     private SerialMessageHandler msgHandler;
     
-	public SerialComm (String portID, int timeout) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
+	public SerialComm (String portID, int timeout, Database db, ObjectOutputStream objectOutputStream) throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
+		this.db = db;
+		this.objectOutputStream = objectOutputStream;
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portID);
 
 		if(portIdentifier.isCurrentlyOwned()){
@@ -50,17 +55,14 @@ public class SerialComm extends Thread {
 				serialPort = (SerialPort) commPort;
 				serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 			
-				inputStream = serialPort.getInputStream();
-				outputStream = serialPort.getOutputStream();
+				serialInputStream = serialPort.getInputStream();
+				serialOutputStream = serialPort.getOutputStream();
 				
 	            serialPort.notifyOnDataAvailable(true); // activate the DATA_AVAILABLE notifier
 				
 	            System.out.println("SerialComm Open");
-
-	            db = new Database(); // connect to database
-	    		db.connectToMYSQL();
 	    		
-	    		msgHandler = new SerialMessageHandler(db); // create messageHandler
+	    		msgHandler = new SerialMessageHandler(); // create messageHandler
 	    		
 	    		System.out.println("Connected to database");
 	    		
@@ -82,9 +84,9 @@ public class SerialComm extends Thread {
     			
     			try {
     				
-    				if (inputStream.available() > 0) {
+    				if (serialInputStream.available() > 0) {
     					//NOW DECODE AND ASSEMBLE FRAME
-    					int numBytes = inputStream.read(readBuffer);
+    					int numBytes = serialInputStream.read(readBuffer);
     					//loop over data
     					for (int i=0; i<numBytes; i++) {
     						//TODO seperate thread for faster speeds?
@@ -121,15 +123,15 @@ public class SerialComm extends Thread {
                         					roomData.setDoorStatus(Data.doorStatusCodes.OPEN);
                         				}
                         				
-                        				msgHandler.handleMessage(roomData);
+                        				msgHandler.handleMessage(roomData,db, objectOutputStream, serialOutputStream);
                         			case 'F': //ACK (for command)
                         				ACK ack = new ACK();
                         				ack.setType(ACK.types.COMMAND);
-                        				msgHandler.handleMessage(ack);
+                        				msgHandler.handleMessage(ack,db, objectOutputStream, serialOutputStream);
                         				
                         			case 'D':	//Alarm 
                         				Alarm alarm = new Alarm();
-                        				msgHandler.handleMessage(alarm);
+                        				msgHandler.handleMessage(alarm,db, objectOutputStream, serialOutputStream);
                         				
                         		}
                         		
@@ -158,7 +160,7 @@ public class SerialComm extends Thread {
     /** Write frames to PIC 
      * @throws IOException **/
     public void serialWrite(byte[] out) throws IOException{
-    	outputStream.write(out, 0, out.length);
+    	serialOutputStream.write(out, 0, out.length);
     }
     
    
@@ -227,16 +229,16 @@ public class SerialComm extends Thread {
      * Function returns the input stream setupCommunication should be called first
      * @return 
      */
-    public InputStream getInputStream(){
-        return inputStream;
+    public InputStream getSerialInputStream(){
+        return serialInputStream;
     }
     
     /**
      * Getter for the outputstream in case data is to be written to the serial port
      * @return
      */
-    public OutputStream getOutputStream(){
-        return outputStream;
+    public OutputStream getSerialOutputStream(){
+        return serialOutputStream;
     }
     
 	
