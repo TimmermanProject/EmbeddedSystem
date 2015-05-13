@@ -24,8 +24,10 @@ public class RFID extends Message {
     	out[1] = (byte) '1'; 							//	address of source
     	
     	if (statusCode == statusCodes.ADD){
+    		System.out.println("Sending RFID Add Request");
     		out[2] = (byte) 'b';						//	frameType
     	} else if (statusCode == statusCodes.REMOVE){
+    		System.out.println("Sending RFID Remove Request");
     		out[2] = (byte) 'c';						//	frameType
     	}
     	

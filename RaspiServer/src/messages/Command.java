@@ -1,6 +1,7 @@
 package messages;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 import messages.RFID.statusCodes;
@@ -15,6 +16,7 @@ public class Command extends Message {
 
 	@Override
 	public void sendSerial(OutputStream outputStream) {
+		System.out.println("Sending Command");
 		byte[] out = new byte[16];
     	out[0] = (byte) '#'; 		//	starting delimeter
     	out[1] = (byte) '1'; 		//	address of source
@@ -34,6 +36,11 @@ public class Command extends Message {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
+	}
+	
+	@Override
+	public void sendObject(ObjectOutputStream objectOutputStream) throws IOException{
+		objectOutputStream.writeObject(this);	
 	}
 	
 	/** getters and setters **/

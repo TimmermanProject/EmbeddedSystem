@@ -25,7 +25,17 @@ import messages.DataRequest;
 import messages.RFID;
 
 public class MessageHandler extends Thread {
-	public void handleMessage(Object obj, Database db, ObjectOutputStream objectOutputStream, OutputStream serialOutputStream){
+	private Database db;
+	private ObjectOutputStream objectOutputStream;
+	private OutputStream serialOutputStream;
+	
+	public MessageHandler(Database db,OutputStream objectOutputStream,OutputStream serialOutputStream){
+		this.db = db;
+		this.objectOutputStream = (ObjectOutputStream) objectOutputStream;
+		this.serialOutputStream = serialOutputStream;
+	}
+	
+	public void handleMessage(Object obj){
 		//TODO check were we can implement factory
 		/**
 		//check incoming frame type
@@ -50,24 +60,39 @@ public class MessageHandler extends Thread {
 				data.sendObject(objectOutputStream); //send object to building subsystem
 			} catch (SQLException e) {
 				System.out.println("SQL Exception in MessageHandler");
+				e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("IO Exception in MessageHandler");
+				e.printStackTrace();
+				
 			}
 		}else if (obj instanceof RFID){
 			RFID msg = (RFID) obj;
 			try {
-				db.db_updateDoorStatus(msg.getRoom()); //update database
+				msg.sendSerial(serialOutputStream); //send over serial connection to room subsystem
+				if (msg.getStatus()==RFID.statusCodes.ADD){ // database call
+					db.db_addTag(msg.getRoom(), msg.getTag());
+				} else if (msg.getStatus()==RFID.statusCodes.REMOVE) {
+					db.db_removeTag(msg.getRoom(), msg.getTag());
+				}
 			} catch (SQLException e) { 
 				System.out.println("SQL Exception in MessageHandler");
+				e.printStackTrace();
 			}
-			msg.sendSerial(serialOutputStream); //send over serial connection to room subsystem
-
 		} else if (obj instanceof Command){
+			Command msg = (Command) obj;
+			//db.db_setCommandFlag(msg.getRoom().)
 			//TODO edit database
 			//send frame over serial
 		} else if (obj instanceof Alarm){
-			//TODO edit database
-			//send frame over serial
+			Alarm msg = (Alarm) obj;
+			try {
+				db.db_setAlarmFlag(msg.getRoom());
+				//TODO send message to PIC to disable alarm; add to frameType; could be inside command frame!
+			} catch (SQLException e) {
+				System.out.println("SQL Exception in MessageHandler");
+				e.printStackTrace();
+			}
 		}
 		
 		// TODO LOG FILE REQUEST

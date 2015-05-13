@@ -108,7 +108,7 @@ public class EthernetCommClient extends Thread {
 	public void sendTestFrame(){
 		Data frame = new Data();
 		frame.setFrameType(Message.frameTypes.DATA);
-		frame.setRoom(new Room(1,2));
+		frame.setRoom(new Room(2));
 		
 		sendEthernetFrame(frame);
 	}

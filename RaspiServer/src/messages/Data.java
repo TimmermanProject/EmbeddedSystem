@@ -18,7 +18,7 @@ public class Data extends Message {
 	public enum doorStatusCodes { OPEN, CLOSED, EMERGENCY }
 	
 	private ArrayList<Integer> accessCodes; 		// contains list of RFID that can enter room
-	private doorStatusCodes doorStatus; // current door status, open or closed
+	private doorStatusCodes doorStatus; 			// current door status, open or closed
 	
 	public Data(){
 		this.setFrameType(frameTypes.DATA);

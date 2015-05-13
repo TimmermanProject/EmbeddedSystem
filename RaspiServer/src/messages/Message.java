@@ -44,11 +44,11 @@ public abstract class Message implements Serializable {
 		return room;
 	}
 
-	void sendSerial(OutputStream outputStream) {
+	public void sendSerial(OutputStream outputStream) {
 		System.out.println("Not supported for this message");
 	}
 	
-	void sendObject(ObjectOutputStream objectOutputStream) throws IOException{
+	public void sendObject(ObjectOutputStream objectOutputStream) throws IOException{
 		System.out.println("Not supported for this message");
 	}
 }
