@@ -10,7 +10,11 @@ package messages;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import core.Database;
 
 public class Data extends Message {
 	private static final long serialVersionUID = -1547837996222004778L;
@@ -67,6 +71,15 @@ public class Data extends Message {
 		this.doorStatus = doorStatus;
 	}
 
+	/** message came in from building subsystem**/
+	@Override
+	public void execute(Database db, ObjectOutputStream objectOutputStream,
+			OutputStream serialOutputStream) throws SQLException {
+		//Data msg = (Data) obj;
+		//TODO update database
+		System.out.println("not implemented yet");
+		
+	}
 
 	
 }

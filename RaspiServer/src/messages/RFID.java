@@ -6,11 +6,16 @@
 package messages;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 import java.util.Arrays;
 
+import core.Database;
+
 public class RFID extends Message {
+	private static final long serialVersionUID = 1L;
 	private char tag; 
 	public enum statusCodes { ADD, REMOVE }
 	private statusCodes statusCode;
@@ -71,4 +76,18 @@ public class RFID extends Message {
 	public statusCodes getStatus(){
 		return statusCode;
 	}
+
+	/** message came in from building subsystem**/
+	@Override
+	public void execute(Database db, ObjectOutputStream objectOutputStream,
+			OutputStream serialOutputStream) throws SQLException {
+		
+		this.sendSerial(serialOutputStream); //send over serial connection to room subsystem
+		if (this.getStatus()==RFID.statusCodes.ADD){ // database call
+			db.db_addTag(this.getRoom(), this.getTag());
+		} else if (this.getStatus()==RFID.statusCodes.REMOVE) {
+			db.db_removeTag(this.getRoom(), this.getTag());
+		}
+		
+	}	
 }

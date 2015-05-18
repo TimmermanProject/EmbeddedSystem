@@ -8,6 +8,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
@@ -122,7 +123,9 @@ public class Raspi extends Thread {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        } catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String [] args){

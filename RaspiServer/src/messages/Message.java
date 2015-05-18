@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.sql.SQLException;
 
+import core.Database;
 import core.Room;
 
 /** 
@@ -20,6 +22,8 @@ import core.Room;
  * **/
 
 public abstract class Message implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	public enum frameTypes { DATA, DATA_REQUEST, ACK, RFID, COMMAND, ALARM }
 	private frameTypes frameType;
 	private Room room;
@@ -51,4 +55,7 @@ public abstract class Message implements Serializable {
 	public void sendObject(ObjectOutputStream objectOutputStream) throws IOException{
 		System.out.println("Not supported for this message");
 	}
+	
+	/** message came in from building subsystem**/
+	public abstract void execute(Database db, ObjectOutputStream objectOutputStream, OutputStream serialOutputStream) throws SQLException;
 }

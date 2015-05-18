@@ -3,10 +3,12 @@ package messages;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.sql.SQLException;
 
-import messages.RFID.statusCodes;
+import core.Database;
 
 public class Command extends Message {
+	private static final long serialVersionUID = 1L;
 	private int actionID;
 	private int newStatus;
 	
@@ -72,4 +74,18 @@ public class Command extends Message {
 	public void setNewStatus(int newStatus) {
 		this.newStatus = newStatus;
 	}
+
+
+	/** message came in from building subsystem 
+	 * @throws SQLException **/
+	@Override
+	public void execute(Database db, ObjectOutputStream objectOutputStream,
+			OutputStream serialOutputStream) throws SQLException {
+		
+		db.db_setCommandFlag(this.getRoom()); //edit database
+
+		//send frame over serial
+		sendSerial(serialOutputStream);
+	}
+	
 }
