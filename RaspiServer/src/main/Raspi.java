@@ -11,6 +11,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
+import messages.Alarm;
+import messages.Message;
+import messages.RFID;
 import communication.AbstractComm;
 import communication.CommFactory;
 import communication.EthernetFactory;
@@ -23,6 +26,11 @@ import core.Room;
 /** 
  * @author thomasverbeke
  * TODO Maybe I could bring up the handler
+ * 
+ * 	List serial ports
+ * 
+ * 	ls /dev/tty.*
+ *	ls /dev/cu.*
  **/
 
 public class Raspi extends Thread {
@@ -56,7 +64,7 @@ public class Raspi extends Thread {
 				System.out.println("IOException in initCommunication");
 			}
 		} else {
-			System.out.println("USB communication not implemented");
+			System.out.println("This type of communication is not implemented");
 		}
 		
 		/** COMM TO ROOM LEVEL **/
@@ -64,7 +72,7 @@ public class Raspi extends Thread {
 			try {
 				commFactory = new SerialFactory();
 				communication_DOWN = commFactory.createComm();
-				communication_DOWN.connect("/dev/ttyS80", 4000);
+				communication_DOWN.connect("/dev/tty.usbserial-00001004", 4000);
 				
 				//communication_DOWN = new SerialComm(,,db,communication_UP.getObjectOutputStream()); //portID, timeout
 			} catch (IOException e) {
@@ -72,19 +80,36 @@ public class Raspi extends Thread {
 				e.printStackTrace();
 			}
 		} else {
-			
+			System.out.println("This type of communication is not implemented");
 		}
 		
 		msgHandler = new MessageHandler(db,communication_UP.getOutputStream(),communication_DOWN.getOutputStream());
+		/**
+		try {
+			communication_DOWN.addListener(db,communication_UP.getOutputStream());
+		} catch (TooManyListenersException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	**/
 	}
 
 	public void run(){
 		try {	
-			while (true){		
-				ObjectInputStream objectInputStream = (ObjectInputStream) communication_UP.getInputStream();
-				Object o = objectInputStream.readObject();
-				msgHandler.handleMessage(o);
-				communication_DOWN.addListener(db,communication_UP.getOutputStream());		
+			//send test message for adding a RFID to list
+			System.out.println("Sending test message");
+			RFID msg = new RFID();
+			msg.setRoom(new Room(1));
+			msg.setTag('1');
+			msg.setStatus(RFID.statusCodes.ADD);
+			msg.sendSerial(communication_DOWN.getOutputStream());	
+			
+			while (true){
+				if (communication_UP.status){
+					ObjectInputStream objectInputStream = (ObjectInputStream) communication_UP.getInputStream();
+					Object o = objectInputStream.readObject();
+					msgHandler.handleMessage(o);
+					
+				}
 			}
 		} catch (EOFException e){	
 			System.out.println("Connection lost");
@@ -97,13 +122,11 @@ public class Raspi extends Thread {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch (TooManyListenersException e) {
-			e.printStackTrace();
-		}
+        }
 	}
 	
 	public static void main(String [] args){
 		Raspi t =  new Raspi();
-		t.start();
+		t.run();
 	}
 }

@@ -7,9 +7,11 @@ package messages;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 
 public class RFID extends Message {
-	private int tag; 
+	private char tag; 
 	public enum statusCodes { ADD, REMOVE }
 	private statusCodes statusCode;
 	
@@ -19,20 +21,20 @@ public class RFID extends Message {
 	
 	@Override
 	public void sendSerial(OutputStream outputStream) {
-		byte[] out = new byte[16];
-    	out[0] = (byte) '#'; 							//	starting delimeter
-    	out[1] = (byte) '1'; 							//	address of source
+		byte[] out = new byte[5];
+    	out[0] = '#'; 							//	starting delimeter
+    	out[1] = '1'; 							//	address of source
     	
     	if (statusCode == statusCodes.ADD){
     		System.out.println("Sending RFID Add Request");
-    		out[2] = (byte) 'b';						//	frameType
+    		out[2] = 'b';						//	frameType
     	} else if (statusCode == statusCodes.REMOVE){
     		System.out.println("Sending RFID Remove Request");
-    		out[2] = (byte) 'c';						//	frameType
+    		out[2] = 'c';						//	frameType
     	}
     	
 		out[3] = (byte) tag; 							//	message: 1B RFID tag
-		out[4] = (byte) '\n';							//	ending delimter
+		out[4] = '\n';							//	ending delimter
 		
 		try {
 			/**
@@ -41,6 +43,11 @@ public class RFID extends Message {
 		     * @param n      Amount of data to write, starting from off.
 		     * @return       Amount of data actually written
 		     **/
+			System.out.println("FORMAT BYTE: "+Arrays.toString(out));
+			
+			System.out.println("FORMAT CHAR: " + new String(out, Charset.forName("ISO-8859-1")));
+			System.out.println(out);
+			
 			outputStream.write(out, 0, out.length);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -49,11 +56,11 @@ public class RFID extends Message {
 	
 	/** getters and setters **/
 	
-	public void setTag(int tag){
+	public void setTag(char tag){
 		this.tag = tag;
 	}
 	
-	public int getTag (){
+	public char getTag (){
 		return tag;
 	}
 	
