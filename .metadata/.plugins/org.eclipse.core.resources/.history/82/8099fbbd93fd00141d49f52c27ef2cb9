@@ -1,0 +1,41 @@
+package messages;
+
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.sql.SQLException;
+
+import core.Database;
+
+public class ACK extends Message {
+	private static final long serialVersionUID = 1L;
+
+	public enum types {COMMAND }
+	public types type;
+	
+	public ACK(){
+		this.setFrameType(frameTypes.ACK); 
+	}
+	
+	public void setType (types ACK_type){
+		type = ACK_type;
+	}
+	
+	public types getType(){
+		return type;
+	}
+
+	/** message came in from building subsystem**/
+	@Override
+	public void execute(Database db, ObjectOutputStream objectOutputStream,
+			OutputStream serialOutputStream) throws SQLException {
+		// TODO Auto-generated method stub
+		System.out.println("currently unsupported");
+	}
+	
+	/**
+	if( obj instanceof Data ){
+		//Data msg = (Data) obj;
+		//TODO update database
+	} **/
+
+}

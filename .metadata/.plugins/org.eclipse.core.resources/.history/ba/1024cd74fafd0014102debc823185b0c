@@ -1,0 +1,112 @@
+package communication;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import messages.ACK;
+import messages.Alarm;
+import messages.Command;
+import messages.Data;
+import messages.Message;
+import core.DatabaseSingleton;
+import core.Room;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
+
+public class SerialListener implements SerialPortEventListener {
+	private InputStream serialInputStream;
+    private OutputStream serialOutputStream;
+    private ObjectOutputStream objectOutputStream;
+    private DatabaseSingleton db;
+    
+	public SerialListener(DatabaseSingleton db, InputStream serialInputStream,OutputStream serialOutputStream, ObjectOutputStream objectOutputStream){
+		this.db = db;
+		this.serialInputStream = serialInputStream;
+		this.serialOutputStream = serialOutputStream;
+		this.objectOutputStream = objectOutputStream;
+	}
+	
+	public SerialListener(DatabaseSingleton db2, InputStream in, OutputStream out) {
+		this.db = db;
+		this.serialInputStream = serialInputStream;
+		this.serialOutputStream = serialOutputStream;
+	}
+
+	@Override
+	/** Catch serial events and assemble the incoming frames 
+     *  TODO Callback routine
+     * **/
+    public void serialEvent(SerialPortEvent event) {
+    	byte[] readBuffer = new byte[400];
+    	
+    	switch (event.getEventType()) { 
+    		case SerialPortEvent.DATA_AVAILABLE:
+    			
+    			try {
+    				
+    				if (serialInputStream.available() > 0) {
+    					//NOW DECODE AND ASSEMBLE FRAME
+    					int numBytes = serialInputStream.read(readBuffer);
+    					//loop over data
+    					for (int i=0; i<numBytes; i++) {
+    						//TODO seperate thread for faster speeds?
+                        	char serialChar = (char) readBuffer[i]; //cast
+                        	
+                        	if (serialChar == '#'){ //start delimiter
+                        		System.out.println("Start of frame");
+                        		
+                        		int source = (int) readBuffer[i+1]; //SOURCE
+                        		Room room = new Room(source);
+                        		Message msg;
+                        		char type = (char) readBuffer[i+2]; //third byte
+                        		switch (type) {
+                        			//type
+                        			case 'A': //RoomData: SIZE: 12bytes; as result of request or RFID set/delete  				                      			
+                        				//set doorStatus
+                        				if (readBuffer[i+14]=='A'){
+                        					room.setDoorStatus(Room.doorStatusCodes.CLOSED);
+                        				} else if (readBuffer[i+14]=='B'){
+                        					room.setDoorStatus(Room.doorStatusCodes.EMERGENCY);
+                        				} else if (readBuffer[i+14]=='C'){
+                        					room.setDoorStatus(Room.doorStatusCodes.OPEN);
+                        				}	
+                        				
+                        			case 'F': //ACK (for command)
+                        				room.setCmdFlag(true);
+                        				msg = new Command();
+                        				msg.setRoom(room);
+                        				msg.sendObject(objectOutputStream);
+                        				db.db_setCommandFlag(room);
+                        				
+                        			case 'D':	//Alarm 
+                        				room.setAlarmFlag(true);
+                        				msg = new Alarm();
+                        				msg.setRoom(room);
+                        				msg.sendObject(objectOutputStream);	
+                        				db.db_setAlarmFlag(room);
+                        		}
+                        		
+                        		//TODO add frame to queue for handling
+                        		System.out.println("Frame assembled and added to queue");
+                      
+                        	} else if (serialChar == '\r') { //end delimiter
+                        		//end of frame -> stop
+                        		System.out.println("End of frame");
+                        		break;
+                        	} else {
+                        		System.out.println("Lost data?");
+                        		i++;
+                        	}
+                        }
+    				}
+    			} catch (IOException | SQLException ex) {
+                    // it's best not to throw the exception because the RXTX thread may not be prepared to handle
+    			}
+    	}
+    }
+
+}

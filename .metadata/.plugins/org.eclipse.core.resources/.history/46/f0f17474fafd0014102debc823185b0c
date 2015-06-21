@@ -1,0 +1,7 @@
+package communication;
+
+import core.DatabaseSingleton;
+
+public interface CommFactory {
+	public AbstractComm createComm();
+}

@@ -1,0 +1,56 @@
+package communication;
+import gnu.io.NoSuchPortException;
+import gnu.io.PortInUseException;
+import gnu.io.UnsupportedCommOperationException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.UnknownHostException;
+import java.util.TooManyListenersException;
+
+import core.MYSQL_db;
+import core.Room;
+import messages.Data;
+import messages.Message;
+
+/** 
+ * @author thomasverbeke
+ * Use an abstract factory in order to decouple communciation technology (between Raspi and server) at run-time
+ * 
+ **/
+
+public abstract class AbstractComm {
+	protected InputStream in;
+	protected OutputStream out;
+	public boolean status;
+	
+	AbstractComm(){
+		in=null;
+		out=null;
+	}
+	
+	/** connect to the server using said technology 
+	 * @throws IOException 
+	 * @throws UnknownHostException **/
+	public void connect(String serverName, int port) throws UnknownHostException, IOException {}
+	
+	/** close the connection 
+	 * @throws IOException **/
+	public void closeConnection() throws IOException {}
+	
+	public void addListener(MYSQL_db db, OutputStream outputStream) throws TooManyListenersException {}
+	
+
+	/** getter for inputstream **/
+	public InputStream getInputStream(){
+		return in;
+	}
+	
+	/** getter for outputstream**/
+	public OutputStream getOutputStream(){
+		return out;
+	}
+}

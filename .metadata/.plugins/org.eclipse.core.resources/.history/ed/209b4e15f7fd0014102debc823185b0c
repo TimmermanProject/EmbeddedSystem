@@ -1,0 +1,7 @@
+package core;
+
+public class MYSQL_db {
+	private static MYSQL_db instance;
+	
+	private MYSQL_db(){};
+}

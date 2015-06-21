@@ -1,0 +1,15 @@
+package core;
+
+/** This singleton implementation does not require synchronization **/
+public class MYSQL_db {
+	private MYSQL_db(){}
+	
+	private static class SingletonHelper{
+        private static final MYSQL_db INSTANCE = new MYSQL_db();
+    }
+	
+	public static MYSQL_db getInstance(){
+        return SingletonHelper.INSTANCE;
+    }
+}
+

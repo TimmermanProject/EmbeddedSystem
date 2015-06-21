@@ -1,0 +1,14 @@
+package core;
+
+public class MYSQL_db {
+	private static MYSQL_db instance;
+	
+	private MYSQL_db(){}
+	
+	public static synchronized MYSQL_db getInstance(){
+		if (instance==null){
+			instance  = new MYSQL_db();
+		}
+		return instance;
+	}
+}

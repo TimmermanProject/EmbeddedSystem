@@ -1,0 +1,14 @@
+package core;
+
+public class MYSQL_db {
+	private MYSQL_db(){}
+	
+	private static class SingletonHelper{
+        private static final MYSQL_db INSTANCE = new MYSQL_db();
+    }
+	
+	public static SingletonHelper getInstance(){
+        return SingletonHelper.INSTANCE;
+    }
+}
+

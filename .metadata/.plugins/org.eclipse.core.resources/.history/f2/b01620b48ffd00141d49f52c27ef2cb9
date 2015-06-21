@@ -1,0 +1,10 @@
+package command;
+
+public class DataRequestCommand implements Command {
+	@Override
+	public void Execute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

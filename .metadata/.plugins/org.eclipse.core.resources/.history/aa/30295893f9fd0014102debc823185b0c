@@ -1,0 +1,30 @@
+package core;
+
+public class MYSQL_db {
+	private static MYSQL_db instance;
+	
+	private MYSQL_db(){}
+	
+	public static synchronized MYSQL_db getInstance(){
+		if (instance==null){
+			instance  = new MYSQL_db();
+		}
+		return instance;
+	}
+}
+
+/**
++++double checked locking+++
+
+public static ThreadSafeSingleton getInstanceUsingDoubleLocking(){
+if(instance == null){
+    synchronized (ThreadSafeSingleton.class) {
+        if(instance == null){
+            instance = new ThreadSafeSingleton();
+        }
+    }
+}
+return instance;
+}
+
+**/

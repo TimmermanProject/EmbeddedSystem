@@ -1,0 +1,35 @@
+package messages;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.sql.SQLException;
+
+import core.Database;
+import messages.Message.frameTypes;
+
+public class Alarm extends Message {
+	public Alarm(){
+		this.setFrameType(frameTypes.ALARM); 
+	}
+	
+	@Override
+	public void sendObject(ObjectOutputStream objectOutputStream) throws IOException{
+		objectOutputStream.writeObject(this);	
+	}
+	/**
+	if( obj instanceof Data ){
+		//Data msg = (Data) obj;
+		//TODO update database
+	} **/
+
+	/** message came in from building subsystem 
+	 * @throws SQLException **/
+	@Override
+	public void execute(Database db, ObjectOutputStream objectOutputStream,
+			OutputStream serialOutputStream) throws SQLException {
+		db.db_setAlarmFlag(this.getRoom());
+		//TODO send message to PIC to disable alarm; add to frameType; could be inside command frame!
+		
+	}
+}

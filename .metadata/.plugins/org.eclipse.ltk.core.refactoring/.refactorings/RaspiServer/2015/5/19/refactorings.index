@@ -1,0 +1,23 @@
+1430830642880	Delete element
+1430831846912	Delete element
+1430855169948	Rename type 'EthernetFactory'
+1430855195945	Rename type 'CommFactory'
+1430855574533	Rename type 'SetupComm'
+1430855814413	Rename type 'Communication'
+1430855834483	Rename type 'Comm'
+1430858914828	Delete element
+1430858931323	Delete element
+1430858993753	Rename type 'CommInterface'
+1430859223912	Rename type 'RaspPi'
+1430936629614	Rename type 'Frame'
+1430936642519	Rename type 'Frame'
+1430936653237	Rename type 'FrameFactory'
+1430936790041	Rename type 'RoomCommand'
+1430936800961	Rename type 'RoomData'
+1430936808805	Rename type 'Data'
+1430937275400	Move compilation unit
+1430937297737	Move compilation unit
+1431167904494	Delete element
+1431167983818	Rename type 'SensorData'
+1431168387035	Rename package 'shared'
+1431184003547	Rename type 'LoadDriver'
