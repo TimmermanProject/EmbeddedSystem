@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
 import messages.Alarm;
+import messages.Command;
 import messages.Message;
 import messages.RFID;
 import communication.AbstractComm;
@@ -21,7 +22,7 @@ import communication.EthernetFactory;
 import communication.MessageHandler;
 import communication.SerialComm;
 import communication.SerialFactory;
-import core.Database;
+import core.MYSQL_db;
 import core.Room;
 
 /** 
@@ -32,16 +33,22 @@ import core.Room;
  * 
  * 	ls /dev/tty.*
  *	ls /dev/cu.*
+ *	
+ *	start tomcat:  	cd /Library/Tomcat/bin
+ *					./startup.sh
+ *
+ *	MYSQL: sudo /usr/local/Cellar/mysql/5.6.22/support-files/mysql.server start
  **/
 
 public class Raspi extends Thread {
 	public static final String COMMUNICATION_TYPE_UP = "Ethernet";
 	public static final String COMMUNICATION_TYPE_DOWN = "Serial";
+	public static final String DATABASE_TYPE = "Mysl"; //better to have in the code
 	public static final int FLOOR_ID = 1;
 	private AbstractComm communication_UP;
 	private AbstractComm communication_DOWN;
 	private CommFactory commFactory;
-	private Database db;
+	private MYSQL_db db;
 	private MessageHandler msgHandler;
 	
 	
@@ -49,7 +56,7 @@ public class Raspi extends Thread {
 		commFactory = null;
 		
 		/** DATABASE (SINGLETON?)**/
-        db = new Database();
+        db = new MYSQL_db();
 		db.connectToMYSQL();
 
 		/** COMM TO BUILDING LEVEL **/
@@ -73,7 +80,7 @@ public class Raspi extends Thread {
 			try {
 				commFactory = new SerialFactory();
 				communication_DOWN = commFactory.createComm();
-				communication_DOWN.connect("/dev/tty.usbserial-00001004", 4000);
+				communication_DOWN.connect("/dev/tty.usbserial-00002006", 4000);
 				
 				//communication_DOWN = new SerialComm(,,db,communication_UP.getObjectOutputStream()); //portID, timeout
 			} catch (IOException e) {
@@ -95,24 +102,30 @@ public class Raspi extends Thread {
 	}
 
 	public void run(){
-		try {	
-			//send test message for adding a RFID to list
-			System.out.println("Sending test message");
-			RFID msg = new RFID();
-			msg.setRoom(new Room(1));
-			msg.setTag('1');
-			msg.setStatus(RFID.statusCodes.ADD);
-			msg.sendSerial(communication_DOWN.getOutputStream());	
+			
+			
+			//RFID msg = new RFID();
+			//msg.setRoom(new Room(1));
+			//msg.setTag('1');
+			//msg.setStatus(RFID.statusCodes.ADD);
+			//msg.sendSerial(communication_DOWN.getOutputStream());	
 			
 			while (true){
-				if (communication_UP.status){
+				//TEST 1: OPEN DOOR
+				System.out.println("Open Door");
+				Command msg = new Command();
+				msg.setActionID('9');
+				//msg.sendSerial(communication_DOWN.getOutputStream());
+				msg.sendSerial(System.out);
+				/**if (communication_UP.status){
 					ObjectInputStream objectInputStream = (ObjectInputStream) communication_UP.getInputStream();
 					Object o = objectInputStream.readObject();
 					msgHandler.handleMessage(o);
 					
-				}
+				} **/
 			}
-		} catch (EOFException e){	
+		
+		/**} catch (EOFException e){	
 			System.out.println("Connection lost");
 			try {
 				communication_UP.closeConnection();
@@ -125,7 +138,7 @@ public class Raspi extends Thread {
             e.printStackTrace();
         } catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}**/
 	}
 	
 	public static void main(String [] args){

@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-import core.Database;
+import core.MYSQL_db;
 
 public class RFID extends Message {
 	private static final long serialVersionUID = 1L;
@@ -79,7 +79,7 @@ public class RFID extends Message {
 
 	/** message came in from building subsystem**/
 	@Override
-	public void execute(Database db, ObjectOutputStream objectOutputStream,
+	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream,
 			OutputStream serialOutputStream) throws SQLException {
 		
 		this.sendSerial(serialOutputStream); //send over serial connection to room subsystem

@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 
-import core.Database;
+import core.MYSQL_db;
 import core.Room;
 
 /** 
@@ -57,5 +57,5 @@ public abstract class Message implements Serializable {
 	}
 	
 	/** message came in from building subsystem**/
-	public abstract void execute(Database db, ObjectOutputStream objectOutputStream, OutputStream serialOutputStream) throws SQLException;
+	public abstract void execute(MYSQL_db db, ObjectOutputStream objectOutputStream, OutputStream serialOutputStream) throws SQLException;
 }

@@ -5,11 +5,11 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
 
-import core.Database;
+import core.MYSQL_db;
 
 public class Command extends Message {
 	private static final long serialVersionUID = 1L;
-	private int actionID;
+	private char actionID;
 	private int newStatus;
 	
 	public Command(){
@@ -19,13 +19,14 @@ public class Command extends Message {
 	@Override
 	public void sendSerial(OutputStream outputStream) {
 		System.out.println("Sending Command");
-		byte[] out = new byte[16];
+		byte[] out = new byte[6];
     	out[0] = (byte) '#'; 		//	starting delimeter
-    	out[1] = (byte) '1'; 		//	address of source
-    	out[2] = (byte) 'e';		//	frameType
-    	out[3] = (byte) actionID;	// 	message : 1B ElementID
-    	out[4] = (byte) newStatus;	// 	message : 1B New Status
-		out[4] = (byte) '\n';		//	ending delimter
+    	out[1] = (byte) '1'; 		//	address of dest
+    	out[2] = (byte) '2';		//  address of source (2 = raspb pi)
+    	out[3] = (byte) 'e';		//	frameType
+    	out[4] = (byte) actionID;	// 	message : 1B ElementID
+    	//out[4] = (byte) newStatus;	// 	message : 1B New Status
+		out[5] = (byte) '\n';		//	ending delimter
 		
 		try {
 			/**
@@ -34,6 +35,7 @@ public class Command extends Message {
 		     * @param n      Amount of data to write, starting from off.
 		     * @return       Amount of data actually written
 		     **/
+			System.out.println(out.length);
 			outputStream.write(out, 0, out.length);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -57,7 +59,7 @@ public class Command extends Message {
 	/**
 	 * @param actionID the actionID to set
 	 */
-	public void setActionID(int actionID) {
+	public void setActionID(char actionID) {
 		this.actionID = actionID;
 	}	
 
@@ -79,7 +81,7 @@ public class Command extends Message {
 	/** message came in from building subsystem 
 	 * @throws SQLException **/
 	@Override
-	public void execute(Database db, ObjectOutputStream objectOutputStream,
+	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream,
 			OutputStream serialOutputStream) throws SQLException {
 		
 		db.db_setCommandFlag(this.getRoom()); //edit database

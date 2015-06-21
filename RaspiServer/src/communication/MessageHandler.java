@@ -11,26 +11,19 @@
  * **/
 
 package communication;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
 
-import core.Database;
-import core.Room;
-import messages.Alarm;
-import messages.Command;
-import messages.Data;
-import messages.DataRequest;
+import core.MYSQL_db;
 import messages.Message;
-import messages.RFID;
 
 public class MessageHandler extends Thread {
-	private Database db;
+	private MYSQL_db db;
 	private ObjectOutputStream objectOutputStream;
 	private OutputStream serialOutputStream;
 	
-	public MessageHandler(Database db,OutputStream objectOutputStream,OutputStream serialOutputStream){
+	public MessageHandler(MYSQL_db db,OutputStream objectOutputStream,OutputStream serialOutputStream){
 		this.db = db;
 		this.objectOutputStream = (ObjectOutputStream) objectOutputStream;
 		this.serialOutputStream = serialOutputStream;

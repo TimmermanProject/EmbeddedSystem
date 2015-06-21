@@ -21,7 +21,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.TooManyListenersException;
 
-import core.Database;
+import core.MYSQL_db;
 
 
 public class SerialComm extends AbstractComm  {
@@ -103,7 +103,7 @@ public class SerialComm extends AbstractComm  {
    }
    **/
    
-   public void addListener(Database db) throws TooManyListenersException{
+   public void addListener(MYSQL_db db) throws TooManyListenersException{
 	   //serialPort.addEventListener(new SerialListener(db, in,out,(ObjectOutputStream) outputStream));
 	   serialPort.addEventListener(new SerialListener(db, in,out));
    }

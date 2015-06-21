@@ -14,7 +14,7 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import core.Database;
+import core.MYSQL_db;
 
 public class Data extends Message {
 	private static final long serialVersionUID = -1547837996222004778L;
@@ -73,7 +73,7 @@ public class Data extends Message {
 
 	/** message came in from building subsystem**/
 	@Override
-	public void execute(Database db, ObjectOutputStream objectOutputStream,
+	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream,
 			OutputStream serialOutputStream) throws SQLException {
 		//Data msg = (Data) obj;
 		//TODO update database
