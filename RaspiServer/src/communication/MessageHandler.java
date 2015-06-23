@@ -15,8 +15,8 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
 
-import core.AbstractDB;
-import messages.Message;
+import shared.Message;
+import database.AbstractDB;
 
 public class MessageHandler extends Thread {
 	private AbstractDB db;

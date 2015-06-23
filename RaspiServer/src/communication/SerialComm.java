@@ -21,7 +21,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.TooManyListenersException;
 
-import core.AbstractDB;
+import database.AbstractDB;
 
 
 public class SerialComm extends AbstractComm  {

@@ -11,10 +11,10 @@ import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.TooManyListenersException;
 
-import core.AbstractDB;
+import shared.Data;
+import shared.Message;
 import shared.RoomShared;
-import messages.Data;
-import messages.Message;
+import database.AbstractDB;
 
 /** 
  * @author thomasverbeke

@@ -3,7 +3,7 @@
  * 
  * **/
 
-package messages;
+package shared;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 
-import core.AbstractDB;
+import database.AbstractDB;
 
 public class RFID extends Message {
 	private static final long serialVersionUID = 1L;

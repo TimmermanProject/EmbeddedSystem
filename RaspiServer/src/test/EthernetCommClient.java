@@ -16,9 +16,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import shared.Data;
+import shared.Message;
 import shared.RoomShared;
-import messages.Data;
-import messages.Message;
 
 
 public class EthernetCommClient extends Thread {

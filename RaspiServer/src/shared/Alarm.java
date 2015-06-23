@@ -1,4 +1,4 @@
-package messages;
+package shared;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import core.AbstractDB;
+import database.AbstractDB;
 
 public class Alarm extends Message {
 	private static final long serialVersionUID = 1L;

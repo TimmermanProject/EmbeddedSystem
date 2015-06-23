@@ -8,15 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.BitSet;
 
+import shared.ACK;
+import shared.Alarm;
+import shared.Data;
+import shared.Message;
 import shared.RoomShared;
+import shared.ACK.states;
+import shared.ACK.types;
 import main.Raspi;
-import messages.ACK;
-import messages.ACK.states;
-import messages.ACK.types;
-import messages.Alarm;
-import messages.Data;
-import messages.Message;
-import core.AbstractDB;
+import database.AbstractDB;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 

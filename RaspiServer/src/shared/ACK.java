@@ -1,4 +1,4 @@
-package messages;
+package shared;
 
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.BitSet;
 
-import core.AbstractDB;
+import database.AbstractDB;
 
 public class ACK extends Message {
 	private static final long serialVersionUID = 1L;

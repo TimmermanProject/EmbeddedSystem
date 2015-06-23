@@ -3,7 +3,7 @@
  * 
  * **/
 
-package messages;
+package shared;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -11,8 +11,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 
-import shared.RoomShared;
-import core.AbstractDB;
+import database.AbstractDB;
 
 /** 
  * @author Thomas Verbeke

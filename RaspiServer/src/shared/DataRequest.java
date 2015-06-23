@@ -1,11 +1,11 @@
-package messages;
+package shared;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
 
-import core.AbstractDB;
+import database.AbstractDB;
 
 
 

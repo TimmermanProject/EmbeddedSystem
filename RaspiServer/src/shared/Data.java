@@ -6,7 +6,7 @@
  * 
  * **/
 
-package messages;
+package shared;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -17,8 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import shared.RoomShared;
-import core.AbstractDB;
+import database.AbstractDB;
 
 public class Data extends Message {
 	private static final long serialVersionUID = -1547837996222004778L;

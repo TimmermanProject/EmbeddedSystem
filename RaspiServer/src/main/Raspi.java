@@ -1,31 +1,19 @@
 package main;
 
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.UnsupportedCommOperationException;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.TooManyListenersException;
-
+import shared.Alarm;
+import shared.Command;
 import shared.RoomShared;
-import messages.Alarm;
-import messages.Command;
-import messages.Message;
-import messages.RFID;
 import communication.AbstractComm;
 import communication.CommFactory;
 import communication.EthernetFactory;
 import communication.MessageHandler;
-import communication.SerialComm;
 import communication.SerialFactory;
-import core.AbstractDB;
-import core.DBFactory;
-import core.MYSQLFactory;
+import database.AbstractDB;
+import database.DBFactory;
+import database.MYSQLFactory;
 
 
 /** 

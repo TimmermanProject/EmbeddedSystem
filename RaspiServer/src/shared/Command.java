@@ -1,4 +1,4 @@
-package messages;
+package shared;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.BitSet;
 
-import core.AbstractDB;
+import database.AbstractDB;
 
 public class Command extends Message {
 	private static final long serialVersionUID = 1L;
