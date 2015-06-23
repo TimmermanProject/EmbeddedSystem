@@ -9,7 +9,7 @@ import messages.ACK;
 import messages.Alarm;
 import messages.Data;
 import messages.Message;
-import messages.Message.frameTypes;
+import messages.Message.messageTypes;
 
 /** 
  * 	@author Thomas Verbeke
@@ -18,12 +18,12 @@ import messages.Message.frameTypes;
  * **/
 
 public class MessageFactory {
-	public Message makeFrame (frameTypes frameType){
-		if (frameType.equals(frameTypes.DATA)){
+	public Message makeFrame (messageTypes frameType){
+		if (frameType.equals(messageTypes.DATA)){
 			return new Data();
-		} else if (equals(frameTypes.ALARM)){
+		} else if (equals(messageTypes.ALARM)){
 			return new Alarm();
-		} else if (equals(frameTypes.ACK)){
+		} else if (equals(messageTypes.ACK)){
 			return new ACK();
 		} else { 
 			return null; 

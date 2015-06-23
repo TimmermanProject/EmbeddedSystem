@@ -9,7 +9,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 
 import core.MYSQL_db;
@@ -21,7 +24,7 @@ public class RFID extends Message {
 	private statusCodes statusCode;
 	
 	public RFID (){
-		this.setFrameType(frameTypes.RFID);
+		this.setFrameType(messageTypes.RFID);
 	}
 	
 	@Override
@@ -59,7 +62,31 @@ public class RFID extends Message {
 		}	
 	}
 	
-	/** getters and setters **/
+	/** update database **/
+	public void updateDatabase(Connection connection) throws SQLException{	
+		System.out.println("Updating RFID for room" + this.getRoom().getRoomID());
+		Statement statement = connection.createStatement();	
+		
+		if (this.getStatus()==RFID.statusCodes.ADD){ 
+			ResultSet resultSet = statement.executeQuery("	"
+					+ 	"INSERT INTO raspi.RFID "
+					+ 	"(ID,RFID_Tag,RoomTableID) VALUES (NULL,"+tag+","+this.getRoom().getRoomID()+");");
+		} else if (this.getStatus()==RFID.statusCodes.REMOVE) {
+			ResultSet resultSet = statement.executeQuery("	"
+					+ 	"DELETE FROM raspi.RFID "
+					+ 	"WHERE rfid.RFID_Tag = "+tag+";");
+		}	
+		
+	}
+	
+	/** message came in from building subsystem**/
+	@Override
+	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream, OutputStream serialOutputStream) throws SQLException {
+		this.sendSerial(serialOutputStream); //send over serial connection to room subsystem
+		this.updateDatabase(db.getConnection());		
+	}	
+	
+	/** Getters and Setters **/
 	
 	public void setTag(char tag){
 		this.tag = tag;
@@ -77,17 +104,4 @@ public class RFID extends Message {
 		return statusCode;
 	}
 
-	/** message came in from building subsystem**/
-	@Override
-	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream,
-			OutputStream serialOutputStream) throws SQLException {
-		
-		this.sendSerial(serialOutputStream); //send over serial connection to room subsystem
-		if (this.getStatus()==RFID.statusCodes.ADD){ // database call
-			db.db_addTag(this.getRoom(), this.getTag());
-		} else if (this.getStatus()==RFID.statusCodes.REMOVE) {
-			db.db_removeTag(this.getRoom(), this.getTag());
-		}
-		
-	}	
 }

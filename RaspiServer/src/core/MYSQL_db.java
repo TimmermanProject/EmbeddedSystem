@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import shared.RoomShared;
+
 public class MYSQL_db {
 	private Connection connect = null;
-	private Statement statement = null;
-	private ResultSet resultSet = null;
 	
 	public void connectToMYSQL(){
 	    try {
@@ -27,62 +27,35 @@ public class MYSQL_db {
 	    	e.printStackTrace();
 	    }
 	}
-	
-	public void db_updateDoorStatus(Room room) throws SQLException{
-		System.out.println("Updating the doorStatus");
-		statement = connect.createStatement();	
-		resultSet = statement.executeQuery("	UPDATE raspi.Rooms "
-											+ 	"SET doorStatus ="+room.getDoorStatus() +" "
-											+ 	"WHERE rooms.RoomID="+room.getRoomID() +";");
+
+	/**
+	 * @return the connect
+	 */
+	public Connection getConnection() {
+		return connect;
+	}
+
+	/**
+	 * @param connect the connect to set
+	 */
+	public void setConnection(Connection connect) {
+		this.connect = connect;
 	}
 	
-	public void db_addTag(Room room, int tag) throws SQLException{
-		System.out.println("Adding the tag to the database");
-		statement = connect.createStatement();
-		resultSet = statement.executeQuery("	"
-				+ 	"INSERT INTO raspi.RFID "
-				+ 	"(ID,RFID_Tag,RoomID) VALUES (NULL,"+tag+","+room.getRoomID()+");");		
-	}
 	
-	public void db_removeTag(Room room, int tag) throws SQLException{
-		System.out.println("Removing tag from database");
-		statement = connect.createStatement();
-		resultSet = statement.executeQuery("	"
-				+ 	"DELETE FROM raspi.RFID "
-				+ 	"WHERE rfid.RFID_Tag = "+tag+";");
-	}
-	
-	public Room db_getData(Room room) throws SQLException{
-		System.out.println("Lookup for room");
-		statement = connect.createStatement();
-		resultSet = statement.executeQuery("	"
-				+ 	"SELECT * FROM raspi.Rooms "
-				+ 	"WHERE raspi.RoomID = "+room.getRoomID()+";");
-		//TODO convert resultSet to room object
-		return room;
-	}
-	
-	public Room db_setAlarmFlag(Room room) throws SQLException{
+	/** OLD CODE
+
+	public RoomShared db_setCommandFlag(RoomShared room) throws SQLException{
 		System.out.println("Set alarm");
 		statement = connect.createStatement();
 		resultSet = statement.executeQuery(""
 				+ 	"UPDATE raspi.Rooms "
-				+ 	"SET alarmFlag ="+room.getAlarmFlag() +" "
-				+ 	"WHERE rooms.RoomID="+room.getRoomID() +";");
-		return room;
-	}
-	
-	public Room db_setCommandFlag(Room room) throws SQLException{
-		System.out.println("Set alarm");
-		statement = connect.createStatement();
-		resultSet = statement.executeQuery(""
-				+ 	"UPDATE raspi.Rooms "
-				+ 	"SET cmdFlag ="+room.getCmdFlag() +" "
+			//	+ 	"SET cmdFlag ="+room.getCmdFlag() +" "
 				+ 	"WHERE rooms.RoomID="+room.getRoomID() +";");
 		
 		return room;
 	}
 	
 	
-	
+	**/
 }

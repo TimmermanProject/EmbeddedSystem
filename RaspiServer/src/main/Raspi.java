@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
+import shared.RoomShared;
 import messages.Alarm;
 import messages.Command;
 import messages.Message;
@@ -23,7 +24,6 @@ import communication.MessageHandler;
 import communication.SerialComm;
 import communication.SerialFactory;
 import core.MYSQL_db;
-import core.Room;
 
 /** 
  * @author thomasverbeke
@@ -37,7 +37,9 @@ import core.Room;
  *	start tomcat:  	cd /Library/Tomcat/bin
  *					./startup.sh
  *
- *	MYSQL: sudo /usr/local/Cellar/mysql/5.6.22/support-files/mysql.server start
+ *	MYSQL: 
+ *  mysql.server start
+ *  had to do  sudo chown -R _mysql /usr/local/var/mysql
  **/
 
 public class Raspi extends Thread {
@@ -65,7 +67,7 @@ public class Raspi extends Thread {
 			 
 			communication_UP = commFactory.createComm();
 			try {
-				String serverAddr = "169.254.26.95";
+				String serverAddr = "169.254.34.199";
 				int port = 8080;
 				communication_UP.connect(serverAddr, port); //non-blocking implementation; 
 			} catch (IOException e) {
@@ -114,9 +116,21 @@ public class Raspi extends Thread {
 				//TEST 1: OPEN DOOR
 				System.out.println("Open Door");
 				Command msg = new Command();
-				msg.setActionID('9');
+				msg.setLightStatus1(true);
+				msg.setDoorStatus(true);
 				//msg.sendSerial(communication_DOWN.getOutputStream());
 				msg.sendSerial(System.out);
+				
+				//TEST 2: ALARM
+				Alarm alrm = new Alarm();
+				alrm.setRoom(new RoomShared(1,1,1));
+				try {
+					alrm.sendObject((ObjectOutputStream) communication_UP.getOutputStream());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				/**if (communication_UP.status){
 					ObjectInputStream objectInputStream = (ObjectInputStream) communication_UP.getInputStream();
 					Object o = objectInputStream.readObject();

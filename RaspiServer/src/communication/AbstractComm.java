@@ -11,8 +11,8 @@ import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.TooManyListenersException;
 
+import shared.RoomShared;
 import core.MYSQL_db;
-import core.Room;
 import messages.Data;
 import messages.Message;
 

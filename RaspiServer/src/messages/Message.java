@@ -11,8 +11,8 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 
+import shared.RoomShared;
 import core.MYSQL_db;
-import core.Room;
 
 /** 
  * @author Thomas Verbeke
@@ -24,27 +24,27 @@ import core.Room;
 public abstract class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public enum frameTypes { DATA, DATA_REQUEST, ACK, RFID, COMMAND, ALARM }
-	private frameTypes frameType;
-	private Room room;
+	public enum messageTypes { DATA, DATA_REQUEST, ACK, RFID, COMMAND, ALARM }
+	private messageTypes messageType;
+	private RoomShared room;
 	
 	//getter
-	public frameTypes getFrameType(){
-		return frameType;
+	public messageTypes getFrameType(){
+		return messageType;
 	}
 	
 	//setter
-	public void setFrameType (frameTypes frameType){
-		this.frameType = frameType;
+	public void setFrameType (messageTypes frameType){
+		this.messageType = frameType;
 	}
 	
 	//setter
-	public void setRoom(Room room){
+	public void setRoom(RoomShared room){
 		this.room = room;
 	}
 	
 	//getter
-	public Room getRoom(){
+	public RoomShared getRoom(){
 		return room;
 	}
 

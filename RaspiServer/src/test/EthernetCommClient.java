@@ -16,7 +16,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import core.Room;
+import shared.RoomShared;
 import messages.Data;
 import messages.Message;
 
@@ -107,8 +107,8 @@ public class EthernetCommClient extends Thread {
 	/** Test function to send a frame **/
 	public void sendTestFrame(){
 		Data frame = new Data();
-		frame.setFrameType(Message.frameTypes.DATA);
-		frame.setRoom(new Room(2));
+		frame.setFrameType(Message.messageTypes.DATA);
+		//frame.setRoom(new RoomShared(2));
 		
 		sendEthernetFrame(frame);
 	}

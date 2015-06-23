@@ -3,16 +3,19 @@ package messages;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
+import shared.RoomShared;
 import core.MYSQL_db;
-import core.Room;
 
 public class DataRequest extends Message {
 	private static final long serialVersionUID = -660126755875805552L;
 
 	public DataRequest(){
-		this.setFrameType(frameTypes.DATA_REQUEST);
+		this.setFrameType(messageTypes.DATA_REQUEST);
 	}
 	
 	@Override
@@ -38,17 +41,7 @@ public class DataRequest extends Message {
 
 	/** message came in from building subsystem**/
 	@Override
-	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream,
-			OutputStream serialOutputStream) throws SQLException {
-		try {
-			Room room = db.db_getData(this.getRoom());
-			Data data = new Data();
-			data.setRoom(room);
-			data.sendObject(objectOutputStream); //send object to building subsystem
-		} catch (IOException e) {
-			System.out.println("IO Exception in MessageHandler");
-			e.printStackTrace();
-			
-		}
+	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream, OutputStream serialOutputStream) throws SQLException {
+		this.sendSerial(serialOutputStream); // foward request to lower RCU (room subsystem)
 	}
 }
