@@ -11,8 +11,8 @@ import java.io.OutputStream;
 import java.net.UnknownHostException;
 import java.util.TooManyListenersException;
 
+import core.AbstractDB;
 import shared.RoomShared;
-import core.MYSQL_db;
 import messages.Data;
 import messages.Message;
 
@@ -41,9 +41,8 @@ public abstract class AbstractComm {
 	 * @throws IOException **/
 	public void closeConnection() throws IOException {}
 	
-	public void addListener(MYSQL_db db, OutputStream outputStream) throws TooManyListenersException {}
+	public void addListener(AbstractDB db, OutputStream outputStream) throws TooManyListenersException {}
 	
-
 	/** getter for inputstream **/
 	public InputStream getInputStream(){
 		return in;

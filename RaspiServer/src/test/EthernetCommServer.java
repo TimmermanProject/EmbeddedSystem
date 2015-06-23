@@ -19,7 +19,6 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 import communication.MessageHandler;
-import core.MYSQL_db;
 
 public class EthernetCommServer extends Thread {
 	private ServerSocket serverSocket;

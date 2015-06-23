@@ -23,7 +23,10 @@ import communication.EthernetFactory;
 import communication.MessageHandler;
 import communication.SerialComm;
 import communication.SerialFactory;
-import core.MYSQL_db;
+import core.AbstractDB;
+import core.DBFactory;
+import core.MYSQLFactory;
+
 
 /** 
  * @author thomasverbeke
@@ -50,16 +53,19 @@ public class Raspi extends Thread {
 	private AbstractComm communication_UP;
 	private AbstractComm communication_DOWN;
 	private CommFactory commFactory;
-	private MYSQL_db db;
+	private DBFactory dbFactory;
 	private MessageHandler msgHandler;
+	private AbstractDB db;
 	
 	
 	public Raspi(){
 		commFactory = null;
+		dbFactory = null;
 		
-		/** DATABASE (SINGLETON?)**/
-        db = new MYSQL_db();
-		db.connectToMYSQL();
+		/** DATABASE **/
+		dbFactory = new MYSQLFactory();
+		db = dbFactory.createDB();
+		db.connect();
 
 		/** COMM TO BUILDING LEVEL **/
 		if (COMMUNICATION_TYPE_UP == "Ethernet"){

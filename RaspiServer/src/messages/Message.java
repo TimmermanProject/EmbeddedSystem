@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.sql.SQLException;
 
 import shared.RoomShared;
-import core.MYSQL_db;
+import core.AbstractDB;
 
 /** 
  * @author Thomas Verbeke
@@ -57,5 +57,5 @@ public abstract class Message implements Serializable {
 	}
 	
 	/** message came in from building subsystem**/
-	public abstract void execute(MYSQL_db db, ObjectOutputStream objectOutputStream, OutputStream serialOutputStream) throws SQLException;
+	public abstract void execute(AbstractDB db, ObjectOutputStream objectOutputStream, OutputStream serialOutputStream) throws SQLException;
 }

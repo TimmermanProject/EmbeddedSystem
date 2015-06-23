@@ -15,15 +15,15 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
 
-import core.MYSQL_db;
+import core.AbstractDB;
 import messages.Message;
 
 public class MessageHandler extends Thread {
-	private MYSQL_db db;
+	private AbstractDB db;
 	private ObjectOutputStream objectOutputStream;
 	private OutputStream serialOutputStream;
 	
-	public MessageHandler(MYSQL_db db,OutputStream objectOutputStream,OutputStream serialOutputStream){
+	public MessageHandler(AbstractDB db,OutputStream objectOutputStream,OutputStream serialOutputStream){
 		this.db = db;
 		this.objectOutputStream = (ObjectOutputStream) objectOutputStream;
 		this.serialOutputStream = serialOutputStream;

@@ -14,31 +14,26 @@ import messages.ACK;
 import messages.ACK.states;
 import messages.ACK.types;
 import messages.Alarm;
-import messages.Command;
 import messages.Data;
 import messages.Message;
-import messages.Message.messageTypes;
-import core.MYSQL_db;
+import core.AbstractDB;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
 public class SerialListener implements SerialPortEventListener {
 	private InputStream serialInputStream;
-    private OutputStream serialOutputStream;
     private ObjectOutputStream objectOutputStream;
-    private MYSQL_db db;
+    private AbstractDB db;
     
-	public SerialListener(MYSQL_db db, InputStream serialInputStream,OutputStream serialOutputStream, ObjectOutputStream objectOutputStream){
+	public SerialListener(AbstractDB db, InputStream serialInputStream, ObjectOutputStream objectOutputStream){
 		this.db = db;
 		this.serialInputStream = serialInputStream;
-		this.serialOutputStream = serialOutputStream;
 		this.objectOutputStream = objectOutputStream;
 	}
 	
-	public SerialListener(MYSQL_db db2, InputStream in, OutputStream out) {
-		this.db = db;
-		this.serialInputStream = serialInputStream;
-		this.serialOutputStream = serialOutputStream;
+	public SerialListener(AbstractDB db2, InputStream in) {
+		this.db = db2;
+		this.serialInputStream = in;
 	}
 
 	@Override
@@ -132,7 +127,6 @@ public class SerialListener implements SerialPortEventListener {
                         			case 'D':	//ALARM (8 bit status (1B)
                         				msg = new Alarm();
                         				msg.setRoom(room);
-                        				byte statusByte = readBuffer[i+3];
                     
                         				BitSet statusBits2 = BitSet.valueOf(new byte[] {readBuffer[i+4]});
                         				   

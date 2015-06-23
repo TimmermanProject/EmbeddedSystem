@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.BitSet;
 
-import core.MYSQL_db;
+import core.AbstractDB;
 
 public class Command extends Message {
 	private static final long serialVersionUID = 1L;
@@ -68,7 +68,7 @@ public class Command extends Message {
 	/** message came in from building subsystem 
 	 * @throws SQLException **/
 	@Override
-	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream,
+	public void execute(AbstractDB db, ObjectOutputStream objectOutputStream,
 			OutputStream serialOutputStream) throws SQLException {
 
 		//foward command to RCU (room sub system)

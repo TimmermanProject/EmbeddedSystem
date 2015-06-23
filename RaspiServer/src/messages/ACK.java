@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.BitSet;
 
-import core.MYSQL_db;
+import core.AbstractDB;
 
 public class ACK extends Message {
 	private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public class ACK extends Message {
 
 	/** message came in from building subsystem**/
 	@Override
-	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream,
+	public void execute(AbstractDB db, ObjectOutputStream objectOutputStream,
 			OutputStream serialOutputStream) throws SQLException {
 		// TODO Auto-generated method stub
 		System.out.println("unsupported");

@@ -18,7 +18,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import shared.RoomShared;
-import core.MYSQL_db;
+import core.AbstractDB;
 
 public class Data extends Message {
 	private static final long serialVersionUID = -1547837996222004778L;
@@ -64,7 +64,7 @@ public class Data extends Message {
 
 	/** message came in from building subsystem**/
 	@Override
-	public void execute(MYSQL_db db, ObjectOutputStream objectOutputStream,
+	public void execute(AbstractDB db, ObjectOutputStream objectOutputStream,
 			OutputStream serialOutputStream) throws SQLException {
 		System.out.println("not implemented yet");
 		
