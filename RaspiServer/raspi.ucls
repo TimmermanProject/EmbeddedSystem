@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="communication.MessageHandler" project="RaspiServer" 
     file="/RaspiServer/src/communication/MessageHandler.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="234" y="317"/>    
+    <position height="-1" width="-1" x="690" y="377"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -57,7 +57,7 @@
   </class>  
   <class id="7" language="java" name="messages.Message" project="RaspiServer" 
     file="/RaspiServer/src/messages/Message.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="230" y="900"/>    
+    <position height="-1" width="-1" x="366" y="1268"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -66,7 +66,7 @@
   </class>  
   <class id="8" language="java" name="messages.RFID" project="RaspiServer" file="/RaspiServer/src/messages/RFID.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-244" y="1090"/>    
+    <position height="-1" width="-1" x="-108" y="1458"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -75,7 +75,7 @@
   </class>  
   <class id="9" language="java" name="messages.Alarm" project="RaspiServer" file="/RaspiServer/src/messages/Alarm.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="268" y="1354"/>    
+    <position height="-1" width="-1" x="404" y="1722"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -84,7 +84,7 @@
   </class>  
   <class id="10" language="java" name="messages.ACK" project="RaspiServer" file="/RaspiServer/src/messages/ACK.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="670" y="1442"/>    
+    <position height="-1" width="-1" x="806" y="1810"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -93,7 +93,7 @@
   </class>  
   <class id="11" language="java" name="messages.DataRequest" project="RaspiServer" 
     file="/RaspiServer/src/messages/DataRequest.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="231" y="662"/>    
+    <position height="-1" width="-1" x="367" y="1030"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -102,7 +102,7 @@
   </class>  
   <class id="12" language="java" name="messages.Data" project="RaspiServer" file="/RaspiServer/src/messages/Data.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="680" y="872"/>    
+    <position height="-1" width="-1" x="816" y="1240"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -111,7 +111,7 @@
   </class>  
   <class id="13" language="java" name="messages.Command" project="RaspiServer" 
     file="/RaspiServer/src/messages/Command.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-148" y="1538"/>    
+    <position height="-1" width="-1" x="-12" y="1906"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -120,7 +120,7 @@
   </class>  
   <class id="14" language="java" name="shared.RoomShared" project="RaspiServer" 
     file="/RaspiServer/src/shared/RoomShared.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-166" y="822"/>    
+    <position height="-1" width="-1" x="-30" y="1190"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -156,7 +156,7 @@
   </class>  
   <class id="18" language="java" name="communication.SerialListener" project="RaspiServer" 
     file="/RaspiServer/src/communication/SerialListener.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-200" y="126"/>    
+    <position height="-1" width="-1" x="205" y="365"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -270,10 +270,10 @@
   <association id="45">    
     <end type="SOURCE" refId="7" navigable="false">      
       <attribute id="46" name="room">        
-        <position height="0" width="0" x="-1868" y="1088"/>      
+        <position height="0" width="0" x="-1732" y="1456"/>      
       </attribute>      
       <multiplicity id="47" minimum="0" maximum="1">        
-        <position height="0" width="0" x="-1868" y="1088"/>      
+        <position height="0" width="0" x="-1732" y="1456"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="14" navigable="true"/>    
