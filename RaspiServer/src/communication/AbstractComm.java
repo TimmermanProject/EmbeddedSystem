@@ -13,7 +13,7 @@ import java.util.TooManyListenersException;
 
 import shared.Data;
 import shared.Message;
-import shared.RoomShared;
+import shared.Room;
 import database.AbstractDB;
 
 /** 

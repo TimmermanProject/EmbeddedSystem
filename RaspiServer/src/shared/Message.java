@@ -25,7 +25,7 @@ public abstract class Message implements Serializable {
 
 	public enum messageTypes { DATA, DATA_REQUEST, ACK, RFID, COMMAND, ALARM }
 	private messageTypes messageType;
-	private RoomShared room;
+	private Room room;
 	
 	//getter
 	public messageTypes getFrameType(){
@@ -38,12 +38,12 @@ public abstract class Message implements Serializable {
 	}
 	
 	//setter
-	public void setRoom(RoomShared room){
+	public void setRoom(Room room){
 		this.room = room;
 	}
 	
 	//getter
-	public RoomShared getRoom(){
+	public Room getRoom(){
 		return room;
 	}
 

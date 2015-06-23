@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
 
 import shared.Data;
 import shared.Message;
-import shared.RoomShared;
+import shared.Room;
 
 
 public class EthernetCommClient extends Thread {

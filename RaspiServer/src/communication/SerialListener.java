@@ -12,7 +12,7 @@ import shared.ACK;
 import shared.Alarm;
 import shared.Data;
 import shared.Message;
-import shared.RoomShared;
+import shared.Room;
 import shared.ACK.states;
 import shared.ACK.types;
 import main.Raspi;
@@ -59,7 +59,7 @@ public class SerialListener implements SerialPortEventListener {
                         		System.out.println("Start of frame");
                         		
                         		int source = (int) readBuffer[i+1]; //SOURCE (3B): [ElementID (1B), RoomID (1B), FloorID (1B)]
-                        		RoomShared room = new RoomShared(1,source, Raspi.FLOOR_ID);
+                        		Room room = new Room(1,source, Raspi.FLOOR_ID);
                         		Message msg;
                         		char type = (char) readBuffer[i+2]; //third byte
                         		switch (type) {  //TYPE (1B)

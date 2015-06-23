@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import shared.Alarm;
 import shared.Command;
-import shared.RoomShared;
+import shared.Room;
 import communication.AbstractComm;
 import communication.CommFactory;
 import communication.EthernetFactory;
@@ -117,7 +117,7 @@ public class Raspi extends Thread {
 				
 				//TEST 2: ALARM
 				Alarm alrm = new Alarm();
-				alrm.setRoom(new RoomShared(1,1,1));
+				alrm.setRoom(new Room(1,1,1));
 				try {
 					alrm.sendObject((ObjectOutputStream) communication_UP.getOutputStream());
 				} catch (IOException e) {

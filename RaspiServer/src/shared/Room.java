@@ -11,12 +11,12 @@ import java.util.ArrayList;
  * 
  * **/
 
-public class RoomShared {
+public class Room {
 	protected static int RoomID;
 	private int ElementID;
 	private int FloorID;
 	
-	public RoomShared(int ElementID, int RoomID, int FloorID){
+	public Room(int ElementID, int RoomID, int FloorID){
 		this.ElementID = ElementID;
 		this.FloorID = FloorID;
 		this.RoomID = RoomID;
