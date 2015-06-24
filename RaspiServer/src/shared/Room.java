@@ -3,6 +3,7 @@ package shared;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * 
  * **/
 
-public class Room {
+public class Room implements Serializable {
 	protected static int RoomID;
 	private int ElementID;
 	private int FloorID;

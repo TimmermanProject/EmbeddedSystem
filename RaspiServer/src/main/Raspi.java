@@ -2,7 +2,10 @@ package main;
 
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.SQLException;
+
 import shared.Alarm;
 import shared.Command;
 import shared.Room;
@@ -61,7 +64,7 @@ public class Raspi extends Thread {
 			 
 			communication_UP = commFactory.createComm();
 			try {
-				String serverAddr = "169.254.34.199";
+				String serverAddr = "169.254.202.43";
 				int port = 8080;
 				communication_UP.connect(serverAddr, port); //non-blocking implementation; 
 			} catch (IOException e) {
@@ -76,7 +79,7 @@ public class Raspi extends Thread {
 			try {
 				commFactory = new SerialFactory();
 				communication_DOWN = commFactory.createComm();
-				communication_DOWN.connect("/dev/tty.usbserial-00002006", 4000);
+				communication_DOWN.connect("/dev/tty.usbserial-00001004", 4000);
 				
 				//communication_DOWN = new SerialComm(,,db,communication_UP.getObjectOutputStream()); //portID, timeout
 			} catch (IOException e) {
@@ -106,31 +109,45 @@ public class Raspi extends Thread {
 			//msg.setStatus(RFID.statusCodes.ADD);
 			//msg.sendSerial(communication_DOWN.getOutputStream());	
 			
-			while (true){
-				//TEST 1: OPEN DOOR
-				System.out.println("Open Door");
-				Command msg = new Command();
-				msg.setLightStatus1(true);
-				msg.setDoorStatus(true);
-				//msg.sendSerial(communication_DOWN.getOutputStream());
-				msg.sendSerial(System.out);
+			
+			ObjectInputStream objectInputStream = (ObjectInputStream) communication_UP.getInputStream();
+			Object o;
 				
-				//TEST 2: ALARM
-				Alarm alrm = new Alarm();
-				alrm.setRoom(new Room(1,1,1));
+			/**
+			//TEST 1: OPEN DOOR
+			System.out.println("Open Door");
+			Command msg = new Command();
+			msg.setLightStatus1(true);
+			msg.setDoorStatus(true);
+			//msg.sendSerial(communication_DOWN.getOutputStream());
+			msg.sendSerial(System.out);
+			**/
+			//TEST 2: ALARM
+			Alarm alrm = new Alarm();
+			alrm.setRoom(new Room(1,1,1));
+			try {
+				alrm.sendObject((ObjectOutputStream) communication_UP.getOutputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+		
+			while (true){
+				
 				try {
-					alrm.sendObject((ObjectOutputStream) communication_UP.getOutputStream());
-				} catch (IOException e) {
+					o = objectInputStream.readObject();
+					msgHandler.handleMessage(o);
+				} catch (ClassNotFoundException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				
-				/**if (communication_UP.status){
-					ObjectInputStream objectInputStream = (ObjectInputStream) communication_UP.getInputStream();
-					Object o = objectInputStream.readObject();
-					msgHandler.handleMessage(o);
-					
-				} **/
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}		
+				 
 			}
 		
 		/**} catch (EOFException e){	
