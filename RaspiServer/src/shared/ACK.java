@@ -19,6 +19,15 @@ public class ACK extends Message {
 	public states state;
 	public byte value;
 	
+	private boolean doorStatus;
+	private boolean doorStatus2;
+	private boolean lightStatus1;
+	private boolean lightStatus2;
+	private boolean lightStatus3;
+	private boolean FireStatus;
+	private boolean SurveillanceStatus;
+	private boolean Extra;
+	
 	public ACK(){
 		this.setFrameType(messageTypes.ACK); 
 	}
@@ -30,17 +39,6 @@ public class ACK extends Message {
 		switch (type){
 			case COMMAND:
 				System.out.println("Updating Status bits for room" + this.getRoom().getRoomID());
-				
-				BitSet statusBits = BitSet.valueOf(new byte[] { value});
-				   
-				Boolean doorStatus = statusBits.get(0);
-				Boolean doorStatus2 = statusBits.get(1);
-				Boolean lightStatus1 = statusBits.get(2);
-				Boolean lightStatus2  = statusBits.get(3);
-				Boolean lightStatus3  = statusBits.get(4);
-				Boolean FireStatus  = statusBits.get(5);
-				Boolean SurveillanceStatus  = statusBits.get(6);
-				Boolean Extra  = statusBits.get(7);
 
 				ResultSet resultSet = statement.executeQuery("	UPDATE raspi.RoomTable "
 						+ 	"SET doorStatus="+doorStatus +
@@ -92,6 +90,134 @@ public class ACK extends Message {
 			OutputStream serialOutputStream) throws SQLException {
 		// TODO Auto-generated method stub
 		System.out.println("unsupported");
+	}
+
+
+	/**
+	 * @return the doorStatus
+	 */
+	public boolean isDoorStatus() {
+		return doorStatus;
+	}
+
+
+	/**
+	 * @param doorStatus the doorStatus to set
+	 */
+	public void setDoorStatus(boolean doorStatus) {
+		this.doorStatus = doorStatus;
+	}
+
+
+	/**
+	 * @return the doorStatus2
+	 */
+	public boolean isDoorStatus2() {
+		return doorStatus2;
+	}
+
+
+	/**
+	 * @param doorStatus2 the doorStatus2 to set
+	 */
+	public void setDoorStatus2(boolean doorStatus2) {
+		this.doorStatus2 = doorStatus2;
+	}
+
+
+	/**
+	 * @return the lightStatus1
+	 */
+	public boolean isLightStatus1() {
+		return lightStatus1;
+	}
+
+
+	/**
+	 * @param lightStatus1 the lightStatus1 to set
+	 */
+	public void setLightStatus1(boolean lightStatus1) {
+		this.lightStatus1 = lightStatus1;
+	}
+
+
+	/**
+	 * @return the lightStatus2
+	 */
+	public boolean isLightStatus2() {
+		return lightStatus2;
+	}
+
+
+	/**
+	 * @param lightStatus2 the lightStatus2 to set
+	 */
+	public void setLightStatus2(boolean lightStatus2) {
+		this.lightStatus2 = lightStatus2;
+	}
+
+
+	/**
+	 * @return the lightStatus3
+	 */
+	public boolean isLightStatus3() {
+		return lightStatus3;
+	}
+
+
+	/**
+	 * @param lightStatus3 the lightStatus3 to set
+	 */
+	public void setLightStatus3(boolean lightStatus3) {
+		this.lightStatus3 = lightStatus3;
+	}
+
+
+	/**
+	 * @return the fireStatus
+	 */
+	public boolean isFireStatus() {
+		return FireStatus;
+	}
+
+
+	/**
+	 * @param fireStatus the fireStatus to set
+	 */
+	public void setFireStatus(boolean fireStatus) {
+		FireStatus = fireStatus;
+	}
+
+
+	/**
+	 * @return the surveillanceStatus
+	 */
+	public boolean isSurveillanceStatus() {
+		return SurveillanceStatus;
+	}
+
+
+	/**
+	 * @param surveillanceStatus the surveillanceStatus to set
+	 */
+	public void setSurveillanceStatus(boolean surveillanceStatus) {
+		SurveillanceStatus = surveillanceStatus;
+	}
+
+
+	/**
+	 * @return the extra
+	 */
+	public boolean isExtra() {
+		return Extra;
+	}
+
+
+	/**
+	 * @param extra the extra to set
+	 */
+	public void setExtra(boolean extra) {
+		Extra = extra;
 	}
 
 }

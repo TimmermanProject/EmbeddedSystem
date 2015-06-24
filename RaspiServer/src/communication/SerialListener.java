@@ -101,7 +101,26 @@ public class SerialListener implements SerialPortEventListener {
                         						((ACK) msg).setValue(readBuffer[i+4]);
                         					case 'e': // command
                         						((ACK) msg).setType(types.COMMAND);
-                        						((ACK) msg).setValue(readBuffer[i+4]);
+                        						byte value = readBuffer[i+4];
+                        						BitSet statusBits2 = BitSet.valueOf(new byte[] { value});
+                        						   
+                        						Boolean doorStatus = statusBits2.get(0);
+                        						Boolean doorStatus2 = statusBits2.get(1);
+                        						Boolean lightStatus1 = statusBits2.get(2);
+                        						Boolean lightStatus2  = statusBits2.get(3);
+                        						Boolean lightStatus3  = statusBits2.get(4);
+                        						Boolean fireStatus  = statusBits2.get(5);
+                        						Boolean surveillanceStatus  = statusBits2.get(6);
+                        						Boolean extra  = statusBits2.get(7);
+
+                        						((ACK) msg).setDoorStatus(doorStatus);
+                        						((ACK) msg).setDoorStatus2(doorStatus2);
+                        						((ACK) msg).setLightStatus1(lightStatus1);
+                        						((ACK) msg).setLightStatus2(lightStatus2);
+                        						((ACK) msg).setLightStatus3(lightStatus3);
+                        						((ACK) msg).setFireStatus(fireStatus);
+                        						((ACK) msg).setSurveillanceStatus(surveillanceStatus);
+                        						((ACK) msg).setExtra(extra);
                         				}
                         				
                         				((ACK) msg).setValue(readBuffer[i+4]);
